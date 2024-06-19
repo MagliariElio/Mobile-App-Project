@@ -423,6 +423,9 @@
     <string name="regenerate_qr" translatable="true">Regenerate QR Code</string>
     <string name="link_expired" translatable="true">Link has expired</string>
     <string name="unable_to_load_data_team_and_member" translatable="true">Error: Unable to load team or member data.</string>
+    <string name="nickname_blank" translatable="true">Nickname cannot be blank!</string>
+    <string name="nickname_too_short" translatable="true">Nickname should be at least 2 characters long!</string>
+    <string name="nickname_invalid" translatable="true">Nickname cannot contain whitespaces!</string>
 
 </resources>
 

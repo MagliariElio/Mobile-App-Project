@@ -418,4 +418,8 @@
     <string name="regenerate_qr">Rigenera codice QR</string>
     <string name="link_expired">Il link è scaduto</string>
     <string name="unable_to_load_data_team_and_member">Errore: impossibile caricare i dati del team o del membro.</string>
+
+    <string name="nickname_blank" translatable="true">Il nickname non può essere vuoto!</string>
+    <string name="nickname_too_short" translatable="true">Il nickname deve contenere almeno 2 caratteri!</string>
+    <string name="nickname_invalid" translatable="true">Il nickname non può contenere spazi!</string>
 </resources>

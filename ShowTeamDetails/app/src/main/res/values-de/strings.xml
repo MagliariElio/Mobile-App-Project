@@ -420,4 +420,8 @@
     <string name="regenerate_qr">QR-Code neu generieren</string>
     <string name="link_expired">Link ist abgelaufen</string>
     <string name="unable_to_load_data_team_and_member">Fehler: Team- oder Mitgliederdaten konnten nicht geladen werden.</string>
+
+    <string name="nickname_blank" translatable="true">Spitzname darf nicht leer sein!</string>
+    <string name="nickname_too_short" translatable="true">Spitzname sollte mindestens 2 Zeichen lang sein!</string>
+    <string name="nickname_invalid" translatable="true">Spitzname darf keine Leerzeichen enthalten!</string>
 </resources>

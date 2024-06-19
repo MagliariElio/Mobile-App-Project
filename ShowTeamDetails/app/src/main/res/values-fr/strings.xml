@@ -421,4 +421,8 @@
     <string name="regenerate_qr">Régénérer le code QR</string>
     <string name="link_expired">Le lien a expiré</string>
     <string name="unable_to_load_data_team_and_member">Erreur: impossible de charger les données de l\'équipe ou du membre.</string>
+
+    <string name="nickname_blank" translatable="true">Le pseudo ne peut pas être vide!</string>
+    <string name="nickname_too_short" translatable="true">Le pseudo doit comporter au moins 2 caractères!</string>
+    <string name="nickname_invalid" translatable="true">Le pseudo ne peut pas contenir d’espaces!</string>
 </resources>

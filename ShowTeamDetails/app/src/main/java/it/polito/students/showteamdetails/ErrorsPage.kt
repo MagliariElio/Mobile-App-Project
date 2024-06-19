@@ -30,6 +30,9 @@ class ErrorsPage {
         val SURNAME_BLANK = R.string.surname_blank
         val SURNAME_TOO_SHORT = R.string.surname_too_short
         val SURNAME_INVALID = R.string.surname_invalid
+        val NICKNAME_BLANK = R.string.nickname_blank
+        val NICKNAME_TOO_SHORT = R.string.nickname_too_short
+        val NICKNAME_INVALID = R.string.nickname_invalid
         val PHONE_NUMBER_BLANK = R.string.phone_number_blank
         val PHONE_NUMBER_INVALID = R.string.phone_number_invalid
         val ADDRESS_BLANK = R.string.address_blank

@@ -622,9 +622,9 @@ class NicknameFieldViewModel(nickname: String) {
 
     fun validate() {
         error = when {
-            editValue.isBlank() -> ErrorsPage.SURNAME_BLANK
-            editValue.length < 2 -> ErrorsPage.SURNAME_TOO_SHORT
-            editValue.any { it.isWhitespace() || it.isDigit() } -> ErrorsPage.SURNAME_INVALID
+            editValue.isBlank() -> ErrorsPage.NICKNAME_BLANK
+            editValue.length < 2 -> ErrorsPage.NICKNAME_TOO_SHORT
+            editValue.any { it.isWhitespace() } -> ErrorsPage.NICKNAME_INVALID
             else -> -1
         }
     }
