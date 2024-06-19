@@ -21,7 +21,6 @@ data class Team(
     val created: CreatedInfo = CreatedInfo(Utils.memberAccessed.value, LocalDateTime.now()),
     val description: String = "",
     val requestsList: List<Member> = emptyList(),
-    var tasksList: List<TaskViewModel> = emptyList(),
 )
 
 class TeamFirebase {
@@ -33,7 +32,6 @@ class TeamFirebase {
     lateinit var created: CreatedInfoFirebase
     lateinit var description: String
     lateinit var requestsList: List<DocumentReference>
-    lateinit var tasksList: List<DocumentReference>
 }
 
 fun Team.toFirebase(): TeamFirebase {
@@ -48,9 +46,6 @@ fun Team.toFirebase(): TeamFirebase {
     team.requestsList = requestsList.map { profile ->
         Firebase.firestore.collection(Utils.CollectionsEnum.users.name).document(profile.id)
     }
-    team.tasksList = tasksList.map {
-        Firebase.firestore.collection(Utils.CollectionsEnum.tasks.name).document(it.id)
-    }
 
     return team
 }
@@ -59,15 +54,14 @@ suspend fun TeamFirebase.toTeam(usersList: List<Member>): Team {
     val createdBy =
         usersList.find { user -> user.id == this.created.member.id } ?: Utils.memberAccessed.value
 
-    val tasksListFlow =
-        this.tasksList.mapNotNull { task -> TaskModel().getTaskById(task.id, usersList) }
-    val tasksList = tasksListFlow.map { task ->
+    //val tasksListFlow = this.tasksList.mapNotNull { task -> TaskModel().getTaskById(task.id, usersList) }
+    /*val tasksList = tasksListFlow.map { task ->
         //convertFlowListToTaskList(tasksListFlow).map { task ->
         TaskViewModel(
             task = task,
             routerActions = Fixture.RouterActionsProvider.provideRouterActions()
         )
-    }
+    }*/
 
     val requestsListMember =
         this.requestsList.map { request ->
@@ -83,6 +77,5 @@ suspend fun TeamFirebase.toTeam(usersList: List<Member>): Team {
         created = created.toCreatedInfo(createdBy),
         description = description,
         requestsList = requestsListMember,
-        tasksList = tasksList
     )
 }

@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import it.polito.students.showteamdetails.Fixture
 import it.polito.students.showteamdetails.R
 import it.polito.students.showteamdetails.Utils
 import it.polito.students.showteamdetails.entity.CreatedInfo
@@ -61,9 +62,14 @@ class TeamListViewModel(
     private fun loadTeams() {
         viewModelScope.launch {
             try {
-                Log.d("SUCCESS", "chiamata")
                 teamModel.getAllTeamsByMemberAccessed().collect { teams ->
                     Log.d("SUCCESS", "loadTeams: ${teams.size}")
+
+                    // load task counts for each team
+                    teams.forEach { team ->
+                        team.loadTaskCounts()
+                    }
+
                     _teamList.value = teams
                     isTeamsListLoading = false
                 }
@@ -84,7 +90,6 @@ class TeamListViewModel(
                 created = CreatedInfo(Utils.memberAccessed.value, LocalDateTime.now()),
                 description = "",
                 requestsList = listOf(),
-                tasksList = emptyList()
             ),
             routerActions = routerActions
         )
@@ -101,16 +106,22 @@ class TeamListViewModel(
     var deleteMessageModalOpen by mutableStateOf<Message?>(null)
 
     fun deleteTeam(teamVm: TeamViewModel) {
-        teamList.value.remove(teamVm)
+        _teamList.value.remove(teamVm)
         viewModelScope.launch {
             teamModel.deleteTeam(teamVm.getTeam())
         }
     }
 
     fun addTeam(team: TeamViewModel) {
-        teamList.value.add(team)
         viewModelScope.launch {
-            teamModel.addTeam(team.getTeam())
+            val teamInserted = teamModel.addTeam(team.getTeam())
+            if (teamInserted != null) {
+                val teamInsertedVm = TeamViewModel(
+                    team = teamInserted,
+                    routerActions = Fixture.RouterActionsProvider.routerActions
+                )
+                _teamList.value.add(teamInsertedVm)
+            }
         }
     }
 
@@ -125,7 +136,7 @@ class TeamListViewModel(
         viewModelScope.launch {
             val isRemoved = teamModel.leaveTeam(member, team.getTeam())
             if (isRemoved) {
-                teamList.value.remove(team)
+                _teamList.value.remove(team)
             }
         }
     }

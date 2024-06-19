@@ -114,7 +114,7 @@ class TaskViewModel(
         createdDate: LocalDateTime,
         message: Int,
         delegatedMember: MemberInfoTeam? = null
-    ) {
+    ): History {
         val history = History(
             member = Utils.memberAccessed.value,
             date = createdDate,
@@ -128,9 +128,11 @@ class TaskViewModel(
                 historyListField.addHistory(history)
             }
         }
+
+        return history
     }
 
-    fun updateTask(taskVm: TaskViewModel) {
+    fun updateTask(taskVm: TaskViewModel, teamId: String) {
         val title = taskVm.titleField.value
         val description = taskVm.descriptionField.value
         val category = taskVm.categoryField.category
@@ -196,7 +198,7 @@ class TaskViewModel(
             )
 
         viewModelScope.launch {
-            taskModel.updateTask(taskVm.getTask())
+            taskModel.updateTask(taskVm.getTask(), teamId)
         }
     }
 
@@ -362,7 +364,6 @@ class TaskViewModel(
                 creationField.setCreatedByVal(Utils.memberAccessed.value)
                 creationField.setDateCreationVal(LocalDateTime.now())
                 historyListField.deleteHistorySynchro()
-                createNewHistoryLine(LocalDateTime.now(), R.string.created_task)
             }
         }
     }
@@ -463,11 +464,11 @@ class TaskViewModel(
 
     fun editRepeatedTasks(taskVm: TaskViewModel, teamVm: TeamViewModel) {
         // Remove all tasks with same id
-        teamVm.tasksList.removeIf {
+        teamVm.tasksList.value.removeIf {
             it.groupID == taskVm.groupID &&
                     taskVm.startDateField.editDate.isBefore(it.startDateField.editDate)
         }
-        teamVm.tasksList.remove(taskVm) // remove itself
+        teamVm.tasksList.value.remove(taskVm) // remove itself
 
         val list = createRepeatedTasksLogic(taskVm, taskVm.groupID)
 

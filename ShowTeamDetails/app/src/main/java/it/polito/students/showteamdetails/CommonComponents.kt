@@ -684,7 +684,7 @@ fun ButtonsSection(
                     }
 
                     // aggiorna il task nel db
-                    taskVm.updateTask(taskVm)
+                    taskVm.updateTask(taskVm, teamVm.teamField.id)
 
                     routerActions.goBack()
                 }
@@ -692,7 +692,6 @@ fun ButtonsSection(
                 if (routerActions.getCurrentRoute()
                         .contains(Utils.RoutesEnum.CREATE_TASK.name) && !areThereErrors
                 ) {
-
                     // Sound and vibration
                     Utils.useSafeMediaPlayer(mediaPlayerSave)
                     Utils.vibrate(context)
@@ -700,9 +699,7 @@ fun ButtonsSection(
                     if (taskVm.repeatField.editValue != Utils.RepeatEnum.NO_REPEAT) {
                         taskVm.createRepeatedTasks(taskVm, teamVm)
                     } else {
-                        scope.launch {
-                            teamVm.addTask(taskVm)  // aggiunge il task al db
-                        }
+                        teamVm.addTask(taskVm)  // aggiunge il task al db
                     }
                     routerActions.goBack()
                 }
@@ -2199,6 +2196,9 @@ fun TeamRow(
     val paddingImage = 2.dp
     val borderImage = BorderStroke(0.5.dp, Color.Black)
 
+    val numberCompletedTaskValue = teamVm.numberCompletedTask.collectAsState().value
+    val numberAssignedTaskValue = teamVm.numberAssignedTask.collectAsState().value
+
     Row(
         modifier = Modifier
             .clickable {
@@ -2291,8 +2291,8 @@ fun TeamRow(
                 Text(
                     text = stringResource(
                         id = R.string.task_status,
-                        teamVm.numberCompletedTask,
-                        teamVm.numberAssignedTask
+                        numberCompletedTaskValue,
+                        numberAssignedTaskValue
                     ),
                     fontSize = 10.sp,
                     color = Color.Black,

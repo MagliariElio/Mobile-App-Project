@@ -53,6 +53,7 @@ class TaskFirebase {
     var commentList: List<DocumentReference> = emptyList()
     var delegateList: List<DocumentReference> = emptyList()
     lateinit var created: CreatedInfoFirebase
+    lateinit var teamId: DocumentReference
 }
 
 suspend fun convertFlowListToTaskList(flowList: List<Flow<Task?>>): List<Task> {
@@ -104,7 +105,7 @@ suspend fun TaskFirebase.toTask(usersList: List<Member>): Task {
     )
 }
 
-fun Task.toTaskFirebase(): TaskFirebase {
+fun Task.toTaskFirebase(teamId: DocumentReference): TaskFirebase {
     // creazione createdFirebase
     val createdFirebase = CreatedInfoFirebase()
     createdFirebase.member = Firebase.firestore.collection(Utils.CollectionsEnum.users.name)
@@ -132,6 +133,7 @@ fun Task.toTaskFirebase(): TaskFirebase {
     taskFirebase.delegateList =
         convertMemberInfoTeamListToMemberInfoTeamFirebaseList(this.delegateList)
     taskFirebase.created = createdFirebase
+    taskFirebase.teamId = teamId
 
     return taskFirebase
 }

@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.Transaction
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import it.polito.students.showteamdetails.Utils
@@ -442,5 +443,18 @@ class ChatModel {
         return deferredResult.await()
     }
 
+    suspend fun deleteGroupChatByTeamId(teamId: String) {
+        try {
+            val teamIdRef = db.collection(Utils.CollectionsEnum.teams.name).document(teamId)
+            val chatQuerySnapshot = db.collection("groupChats").whereEqualTo("teamId", teamIdRef).get().await()
+
+            if (chatQuerySnapshot.documents.isNotEmpty()) {
+                val chatDocRef = chatQuerySnapshot.documents[0].reference
+                chatDocRef.delete().await()
+            }
+        } catch (e: Exception) {
+            Log.e("ERROR", "Error deleting chat by team ID: $teamId", e)
+        }
+    }
 
 }

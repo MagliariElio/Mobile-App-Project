@@ -10,11 +10,9 @@ import it.polito.students.showteamdetails.R
 import it.polito.students.showteamdetails.Utils
 import it.polito.students.showteamdetails.entity.MemberInfoTeam
 import it.polito.students.showteamdetails.entity.Task
-import it.polito.students.showteamdetails.entity.TaskFirebase
 import it.polito.students.showteamdetails.entity.Team
 import it.polito.students.showteamdetails.entity.TeamFirebase
 import it.polito.students.showteamdetails.entity.toFirebase
-import it.polito.students.showteamdetails.entity.toTask
 import it.polito.students.showteamdetails.entity.toTaskFirebase
 import it.polito.students.showteamdetails.entity.toTeam
 import it.polito.students.showteamdetails.viewmodel.TeamViewModel
@@ -24,6 +22,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -57,7 +56,6 @@ class TeamModel(
 
                         team.created.member = Utils.memberAccessed.value
                         team.created.timestamp = LocalDateTime.now()
-                        team.tasksList = emptyList() // default è una lista vuota nell'inserimento
 
                         async {
                             ChatModel().addNewGroupChat(team.id)
@@ -150,40 +148,6 @@ class TeamModel(
         awaitClose { listener.remove() }
     }
 
-
-    fun getAllTasksByTeamId(teamId: String): Flow<List<Task>> = callbackFlow {
-        val query = teamCollection.document(teamId)
-
-        val listener = query.addSnapshotListener { result, error ->
-            if (error != null) {
-                Log.e("ERROR", error.toString())
-                trySend(emptyList()).isSuccess
-                return@addSnapshotListener
-            }
-
-            if (result != null && result.exists()) {
-                val teamFirebase = result.toObject(TeamFirebase::class.java)
-                launch {
-                    val usersList = UserModel().getAllUsersList()
-
-                    val tasks = teamFirebase?.tasksList?.mapNotNull { taskDocumentReference ->
-                        val taskDocument =
-                            taskCollection.document(taskDocumentReference.id).get().await()
-                        val taskFirebase = taskDocument.toObject(TaskFirebase::class.java)
-
-                        taskFirebase?.toTask(usersList)
-                    } ?: emptyList()
-
-                    trySend(tasks).isSuccess
-                }
-            } else {
-                trySend(emptyList()).isSuccess
-            }
-        }
-
-        awaitClose { listener.remove() }
-    }
-
     suspend fun addTask(task: Task, teamId: String): Task? {
         return try {
             withContext(Dispatchers.IO) {
@@ -193,14 +157,17 @@ class TeamModel(
                     val newTaskRef = taskCollection.document()
                     task.id = newTaskRef.id
 
-                    val taskFirebase = task.toTaskFirebase()
-                    taskFirebase.commentList =
-                        emptyList() // default il task viene creato senza commenti
+                    val teamIdReference =
+                        Firebase.firestore.collection(Utils.CollectionsEnum.teams.name)
+                            .document(teamId)
+                    val taskFirebase = task.toTaskFirebase(teamIdReference)
+
+                    taskFirebase.commentList = emptyList() // default il task viene creato senza commenti
 
                     // Aggiungi il task nella tasks collection
                     transaction.set(newTaskRef, taskFirebase)
 
-                    // Ottieni il riferimento al documento del team
+                    /*// Ottieni il riferimento al documento del team
                     val teamDocumentRef = teamCollection.document(teamId)
 
                     // Aggiorna la tasksList del team aggiungendo il riferimento al nuovo task
@@ -208,7 +175,7 @@ class TeamModel(
                         teamDocumentRef,
                         "tasksList",
                         FieldValue.arrayUnion(newTaskRef)
-                    )
+                    )*/
                     Log.d("SUCCESS", "Task added successfully with id: ${task.id}")
 
                     task
@@ -241,9 +208,12 @@ class TeamModel(
         val documentTeam = teamCollection.document(team.id)
 
         try {
+            val tasksList = taskModel.getAllTasksByTeamId(team.id).single()
+            ChatModel().deleteGroupChatByTeamId(team.id)
+
             db.runTransaction { transaction ->
                 // elimina tutti i task associati
-                team.tasksList.forEach { task ->
+                tasksList.forEach { task ->
                     taskModel.deleteTaskTransaction(transaction, task.getTask())
                 }
 
@@ -260,36 +230,48 @@ class TeamModel(
         }
     }
 
+    // TODO: da testare, forse serve un aggiornamento diretto al task
     suspend fun leaveTeam(member: MemberInfoTeam, team: Team): Boolean {
         return try {
             withContext(Dispatchers.IO) {
+                val tasksList = taskModel.getAllTasksByTeamId(team.id).single()
+
                 db.runTransaction { transaction ->
                     // Update task history and remove member from delegated tasks
-                    team.tasksList.forEach { task ->
+                    tasksList.forEach { task ->
                         task.createNewHistoryLine(LocalDateTime.now(), R.string.left_team)
                         task.delegateTasksField.deleteMemberSynch(member)
                     }
-
-                    // Remove member from team members list
-                    team.membersList = team.membersList.filter { it.id != member.id }
 
                     // Delete all member info associated with the team
                     team.membersList.forEach { memberInfo ->
                         memberInfoTeamModel.deleteMemberInfoTeamById(transaction, memberInfo.id)
                     }
+
+                    // Remove member from team members list
+                    team.membersList = team.membersList.filter { it.id != member.id }
                 }.await()
 
-                team.tasksList.forEach { task ->
-                    taskModel.updateTask(task.getTask())
+                tasksList.forEach { task ->
+                    taskModel.updateTask(task.getTask(), team.id)
                 }
 
                 // Update team document
                 updateTeam(team)
+
+                Log.d(
+                    "SUCCESS",
+                    "The member with id ${member.id} left the team with id ${team.id} successfully."
+                )
+
+                if (team.membersList.isEmpty()) {
+                    deleteTeam(team)
+                    Log.d(
+                        "SUCCESS",
+                        "The team with id ${member.id} was deleted successfully because there are no member anymore."
+                    )
+                }
             }
-            Log.d(
-                "SUCCESS",
-                "The member with id ${member.id} left the team with id ${team.id} successfully."
-            )
             true
         } catch (e: Exception) {
             Log.e(
@@ -308,7 +290,7 @@ class TeamModel(
      *  - 1: Member request added successfully
      */
     suspend fun addTeamJoinRequests(teamVm: TeamViewModel, memberId: String): Int {
-        if(teamVm.teamField.requestsTeamField.requests.any { it.id == memberId }) {
+        if (teamVm.teamField.requestsTeamField.requests.any { it.id == memberId }) {
             return -1
         }
         try {

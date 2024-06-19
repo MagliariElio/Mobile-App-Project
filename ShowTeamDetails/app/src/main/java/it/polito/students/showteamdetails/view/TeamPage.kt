@@ -48,6 +48,7 @@ import androidx.compose.material.icons.outlined.MoreHoriz
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -108,6 +109,11 @@ fun TeamPage(
     routerActions: RouterActions
 ) {
     val teamListVm: TeamListViewModel = viewModel(backStackEntry)
+    val isTasksListLoading by teamVm.isTasksListLoading.collectAsState()
+
+    LaunchedEffect(Unit) {
+        teamVm.loadTasks()
+    }
 
     val tabTitles = listOf(
         R.string.pending_status,
@@ -134,52 +140,56 @@ fun TeamPage(
             100f
         }
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize(pageWidth),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp, bottom = 5.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.tasks_list),
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 25.sp
-                    )
-                }
+        if (isTasksListLoading) {
+            CircularProgressIndicator(modifier = Modifier.padding(50.dp))
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize(pageWidth),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 20.dp, bottom = 5.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.tasks_list),
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 25.sp
+                        )
+                    }
 
-                SearchSortFilterArea(
-                    teamVm = teamVm,
-                    setSearchByNameField = { teamVm.searchByNameField = it },
-                    setSortField = { teamVm.sortField = it },
-                    setFilterField = { teamVm.filterField = it }
-                )
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-
-                    TabsBar(
-                        selectedTabIndex = teamVm.selectedTabIndex,
-                        tabTitles = tabTitles.map { stringResource(id = it) },
-                        onTabSelected = { newIndex -> teamVm.selectedTabIndex = newIndex })
-
-                    PageContent(
+                    SearchSortFilterArea(
                         teamVm = teamVm,
-                        tabTitles = tabTitles,
-                        selectedTabIndex = teamVm.selectedTabIndex,
-                        selectTask = selectTask,
-                        searchByNameField = teamVm.searchByNameField,
-                        sortField = teamVm.sortField,
-                        routerActions = routerActions
+                        setSearchByNameField = { teamVm.searchByNameField = it },
+                        setSortField = { teamVm.sortField = it },
+                        setFilterField = { teamVm.filterField = it }
                     )
-                    Spacer(modifier = Modifier.height(100.dp))
+
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+
+                        TabsBar(
+                            selectedTabIndex = teamVm.selectedTabIndex,
+                            tabTitles = tabTitles.map { stringResource(id = it) },
+                            onTabSelected = { newIndex -> teamVm.selectedTabIndex = newIndex })
+
+                        PageContent(
+                            teamVm = teamVm,
+                            tabTitles = tabTitles,
+                            selectedTabIndex = teamVm.selectedTabIndex,
+                            selectTask = selectTask,
+                            searchByNameField = teamVm.searchByNameField,
+                            sortField = teamVm.sortField,
+                            routerActions = routerActions
+                        )
+                        Spacer(modifier = Modifier.height(100.dp))
+                    }
                 }
             }
         }
@@ -198,7 +208,8 @@ fun SearchSortFilterArea(
     val view = LocalView.current
     val filterWeightState = remember { Animatable(if (teamVm.filterAreaOpened) 5f else 1f) }
 
-    val memberAccessedValue = Utils.memberAccessed.collectAsState().value
+    val memberAccessedValue by Utils.memberAccessed.collectAsState()
+    val tasksListValue by teamVm.tasksList.collectAsState()
 
     LaunchedEffect(teamVm.filterAreaOpened) {
         filterWeightState.animateTo(
@@ -334,7 +345,7 @@ fun SearchSortFilterArea(
                     }
 
                     val tags =
-                        teamVm.tasksList.flatMap { it.assignTagsField.value.toList() }.distinct()
+                        tasksListValue.flatMap { it.assignTagsField.value.toList() }.distinct()
 
                     DropdownMenu(
                         expanded = teamVm.filteringDropdownMenuOpened,
@@ -1033,6 +1044,8 @@ fun PageContent(
 ) {
     val view = LocalView.current
 
+    val tasksListValue by teamVm.tasksList.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -1042,7 +1055,7 @@ fun PageContent(
         verticalArrangement = Arrangement.Center
     ) {
 
-        teamVm.currentPageTasks = teamVm.tasksList.toList()
+        teamVm.currentPageTasks = tasksListValue
             .filter {
                 stringResource(id = Utils.convertStatusToString(it.statusField.status)) == stringResource(
                     tabTitles[selectedTabIndex]
@@ -1105,11 +1118,13 @@ fun PageContent(
                                             statusParam = Utils.convertStringToStatus(tabTitles[teamVm.selectedTabIndex + 1]),
                                             taskId = task.id
                                         )
+                                        teamVm.loadTaskCounts()
                                     } else if (teamVm.offsetX < -400f && (teamVm.selectedTabIndex - 1) >= 0) {
                                         task.statusField.setVal(
                                             statusParam = Utils.convertStringToStatus(tabTitles[teamVm.selectedTabIndex - 1]),
                                             taskId = task.id
                                         )
+                                        teamVm.loadTaskCounts()
                                     }
                                 }
                                 teamVm.offsetX = 0f
@@ -1161,7 +1176,7 @@ fun Task(
     task: TaskViewModel,
     routerActions: RouterActions
 ) {
-    val memberAccessedValue = Utils.memberAccessed.collectAsState().value
+    val memberAccessedValue by Utils.memberAccessed.collectAsState()
 
     Column(
         modifier = Modifier
@@ -1355,7 +1370,8 @@ fun AddTaskFloatingButton(
 fun ChangeStatusDropdownMenu(
     changeStatusMenuOpened: Boolean,
     onMenuClosed: () -> Unit,
-    task: TaskViewModel
+    task: TaskViewModel,
+    teamVm: TeamViewModel
 ) {
     val view = LocalView.current
     Box(
@@ -1378,6 +1394,7 @@ fun ChangeStatusDropdownMenu(
                             statusParam = Utils.convertStringToStatus(value = text),
                             taskId = task.id
                         )
+                        teamVm.loadTaskCounts()
                         onMenuClosed()
                     },
                     text = {
@@ -1438,7 +1455,8 @@ fun TaskButtons(
         ChangeStatusDropdownMenu(
             changeStatusMenuOpened = teamVm.changeStatusMenuOpened == task,
             onMenuClosed = { teamVm.changeStatusMenuOpened = null },
-            task = task
+            task = task,
+            teamVm = teamVm
         )
 
         val iconWidth: Dp = 30.dp

@@ -586,11 +586,13 @@ fun TeamView(teamListVm: TeamListViewModel, user: Member, routerActions: RouterA
                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp)
             ) {
                 teamField.teamField.picture.let {
+                    val numberCompletedTaskValue = teamField.numberCompletedTask.collectAsState().value
+                    val numberAssignedTaskValue = teamField.numberAssignedTask.collectAsState().value
                     TeamRow(
                         teamField.teamField.id,
                         teamField.teamField.nameField.value,
-                        teamField.numberCompletedTask,
-                        teamField.numberAssignedTask,
+                        numberCompletedTaskValue,
+                        numberAssignedTaskValue,
                         teamField.grade,
                         teamField.teamField.picture.bitmapView.value,
                         routerActions

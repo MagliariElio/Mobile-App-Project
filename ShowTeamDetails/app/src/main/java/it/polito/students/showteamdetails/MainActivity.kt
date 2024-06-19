@@ -50,33 +50,6 @@ class MainActivity : ComponentActivity() {
         pictureProfile1 = getBitmapFromDrawable(R.drawable.woman_photo_profile)
         pictureProfile2 = getBitmapFromDrawable(R.drawable.man_photo_profile)
 
-        // TODO: con le immagini l'home page contenente i team o le chat va a scatti, se qualcuno può vedere sarebbe bello
-        /*
-        Fixture.team1.teamField.picture.bitmapView.value = getBitmapFromDrawable(R.drawable.picture_profile_team_speedy_workers)
-        Fixture.team1.teamField.picture.bitmapEdit.value = getBitmapFromDrawable(R.drawable.picture_profile_team_speedy_workers)
-
-        Fixture.team2.teamField.picture.bitmapView.value = getBitmapFromDrawable(R.drawable.picture_profile_team_mighty_planners)
-        Fixture.team2.teamField.picture.bitmapEdit.value = getBitmapFromDrawable(R.drawable.picture_profile_team_mighty_planners)
-
-        Fixture.team3.teamField.picture.bitmapView.value = getBitmapFromDrawable(R.drawable.picture_profile_team_crazy_scholars)
-        Fixture.team3.teamField.picture.bitmapEdit.value = getBitmapFromDrawable(R.drawable.picture_profile_team_crazy_scholars)
-
-        Fixture.team4.teamField.picture.bitmapView.value = getBitmapFromDrawable(R.drawable.picture_profile_team_smart_researchers)
-        Fixture.team4.teamField.picture.bitmapEdit.value = getBitmapFromDrawable(R.drawable.picture_profile_team_smart_researchers)
-
-        Fixture.team5.teamField.picture.bitmapView.value = getBitmapFromDrawable(R.drawable.picture_profile_team_wild_developers)
-        Fixture.team5.teamField.picture.bitmapEdit.value = getBitmapFromDrawable(R.drawable.picture_profile_team_wild_developers)
-
-        Fixture.team6.teamField.picture.bitmapView.value = getBitmapFromDrawable(R.drawable.picture_profile_team_brave_pioneers)
-        Fixture.team6.teamField.picture.bitmapEdit.value = getBitmapFromDrawable(R.drawable.picture_profile_team_brave_pioneers)
-
-        Fixture.team7.teamField.picture.bitmapView.value = getBitmapFromDrawable(R.drawable.picture_profile_team_fierce_marketers)
-        Fixture.team7.teamField.picture.bitmapEdit.value = getBitmapFromDrawable(R.drawable.picture_profile_team_fierce_marketers)
-
-        Fixture.team8.teamField.picture.bitmapView.value = getBitmapFromDrawable(R.drawable.picture_profile_team_bold_sellers)
-        Fixture.team8.teamField.picture.bitmapEdit.value = getBitmapFromDrawable(R.drawable.picture_profile_team_bold_sellers)
-        */
-
         setContent {
             ShowTeamDetailsTheme {
                 HomePage(this, intent, googleAuthUiClient)

@@ -548,8 +548,8 @@ fun HomeRouter(
 
             val taskId = backStackEntry.arguments?.getString("taskId")
             val currentTeams by teamListVm.teamList.collectAsState()
-            val taskVm = currentTeams.flatMap { it.tasksList }.find { it.id == taskId }
-            val teamVm = currentTeams.find { it.tasksList.contains(taskVm) }
+            val taskVm = currentTeams.flatMap { it.tasksList.value }.find { it.id == taskId }
+            val teamVm = currentTeams.find { it.tasksList.value.contains(taskVm) }
 
             if (teamVm != null && taskVm != null) {
                 taskVm.stateTab = 0 // reset to the info tab
@@ -571,7 +571,8 @@ fun HomeRouter(
 
             val currentTeams by teamListVm.teamList.collectAsState()
             val teamVm = currentTeams.find { it.teamField.id == teamId }
-            val taskVm = teamVm?.tasksList?.find { it.id == taskId }
+            val tasksListValue = teamVm?.tasksList?.collectAsState()?.value
+            val taskVm = tasksListValue?.find { it.id == taskId }
 
             if (teamVm != null && taskVm != null) {
                 ModifyTaskPage(taskVm, teamVm, applicationContext, routerActions)

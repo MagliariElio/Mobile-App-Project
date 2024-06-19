@@ -11,6 +11,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import it.polito.students.showteamdetails.Fixture
+import it.polito.students.showteamdetails.R
 import it.polito.students.showteamdetails.Utils
 import it.polito.students.showteamdetails.entity.CreatedInfo
 import it.polito.students.showteamdetails.entity.Member
@@ -20,6 +22,9 @@ import it.polito.students.showteamdetails.entity.Task
 import it.polito.students.showteamdetails.entity.Team
 import it.polito.students.showteamdetails.model.TeamModel
 import it.polito.students.showteamdetails.routers.RouterActions
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -30,6 +35,85 @@ class TeamViewModel(
     val routerActions: RouterActions,
     val teamModel: TeamModel = TeamModel()
 ) : ViewModel() {
+
+    private var _isTasksListLoading = MutableStateFlow(true)
+    val isTasksListLoading: StateFlow<Boolean> = _isTasksListLoading.asStateFlow()
+
+    private var taskCache: MutableList<TaskViewModel>? = null
+    private val _tasksList = MutableStateFlow<MutableList<TaskViewModel>>(mutableListOf())
+    val tasksList: StateFlow<MutableList<TaskViewModel>> = _tasksList.asStateFlow()
+
+    fun loadTasks() {
+        viewModelScope.launch {
+            _isTasksListLoading.value = true
+            if (taskCache != null) {
+                _tasksList.value = taskCache!!
+                _isTasksListLoading.value = false
+                Log.d("SUCCESS", "Loaded tasks from cache: ${taskCache!!.size}")
+            } else {
+                try {
+                    Log.d("SUCCESS", "teamId: ${teamField.id}")
+                    teamModel.taskModel.getAllTasksByTeamId(teamId = teamField.id)
+                        .collect { tasks ->
+                            taskCache = tasks // Update the cache
+                            _tasksList.value = tasks
+                            _isTasksListLoading.value = false
+                            Log.d("SUCCESS", "Loaded tasks from DB: ${tasks.size}")
+                        }
+                } finally {
+                    _isTasksListLoading.value = false
+                }
+            }
+        }
+    }
+
+    /*val numberCompletedTask by derivedStateOf {
+        tasksList.value.count {
+            it.statusField.status == Utils.StatusEnum.DONE && (it.creationField.createdBy.id == Utils.memberAccessed.value.id ||
+                    it.delegateTasksField.members.any { p -> p.profile.id == Utils.memberAccessed.value.id })
+        }
+    }
+
+    val numberAssignedTask by derivedStateOf {
+        tasksList.value.count {
+            it.creationField.createdBy.id == Utils.memberAccessed.value.id ||
+                    it.delegateTasksField.members.any { p -> p.profile.id == Utils.memberAccessed.value.id }
+        }
+    }
+
+    val grade by derivedStateOf {
+        val numberAssignedTask = if (numberAssignedTask == 0) 1 else numberAssignedTask
+        (numberCompletedTask * 10) / numberAssignedTask
+    }*/
+
+    private val _numberCompletedTasks = MutableStateFlow(0)
+    val numberCompletedTask: StateFlow<Int> = _numberCompletedTasks.asStateFlow()
+
+    private val _numberAssignedTasks = MutableStateFlow(0)
+    val numberAssignedTask: StateFlow<Int> = _numberAssignedTasks.asStateFlow()
+
+    val grade by derivedStateOf {
+        val numberAssignedTask = if (numberAssignedTask.value == 0) 1 else numberAssignedTask.value
+        (numberCompletedTask.value * 10) / numberAssignedTask
+    }
+
+    fun loadTaskCounts() {
+        viewModelScope.launch {
+            try {
+                val userId = Utils.memberAccessed.value.id
+                _numberCompletedTasks.value =
+                    teamModel.taskModel.getNumberCompletedTasksByUser(userId)
+                _numberAssignedTasks.value =
+                    teamModel.taskModel.getNumberAssignedTasksByUser(userId)
+                Log.d(
+                    "SUCCESS",
+                    "Completed tasks: ${numberCompletedTask.value}, Assigned tasks: ${numberAssignedTask.value}"
+                )
+            } catch (e: Exception) {
+                Log.e("ERROR", "Error loading task counts", e)
+            }
+        }
+    }
 
     var teamField = TeamFieldViewModel(
         team.id,
@@ -42,9 +126,22 @@ class TeamViewModel(
     )
 
     fun addTask(task: TaskViewModel) {
-        tasksList.add(task)
         viewModelScope.launch {
-            teamModel.addTask(task.getTask(), teamField.id)
+            val taskInserted = teamModel.addTask(task.getTask(), teamField.id)
+            if (taskInserted != null) {
+                val taskInsertedVm = TaskViewModel(
+                    task = taskInserted,
+                    routerActions = Fixture.RouterActionsProvider.routerActions
+                )
+                val history = taskInsertedVm.createNewHistoryLine(
+                    taskInsertedVm.creationField.dateCreation,
+                    R.string.created_task
+                )
+                taskInsertedVm.historyListField.addHistory(history)
+                _tasksList.value.add(taskInsertedVm)
+                taskCache?.add(taskInsertedVm)
+            }
+
         }
     }
 
@@ -80,22 +177,24 @@ class TeamViewModel(
         return isAdded
     }
 
+    // TODO: qui funziona, l'interfaccia non si aggiorna
     fun deleteTask(task: TaskViewModel) {
         viewModelScope.launch {
-            val isDeleted = teamModel.taskModel.deleteTask(task.getTask())
-            if (isDeleted) {
-                tasksList.remove(task)
-            }
+            openDeleteAlertDialog = null
+            teamModel.taskModel.deleteTask(task.getTask())
+            _tasksList.value.removeIf { it.id == task.id }
+            taskCache?.removeIf { it.id == task.id }
         }
     }
 
     fun deleteRecurringTask(task: TaskViewModel) {
-        tasksList.forEach {
+        _tasksList.value.forEach {
             if (it.groupID == task.groupID) {
                 deleteTask(it)
             }
         }
-        tasksList.removeAll { it.groupID == task.groupID }
+        _tasksList.value.removeAll { it.groupID == task.groupID }
+        taskCache?.removeAll { it.groupID == task.groupID }
     }
 
     fun deleteMemberRequest(profile: Member) {
@@ -124,13 +223,18 @@ class TeamViewModel(
         }
     }
 
-    fun changeTimePartecipation(member: MemberInfoTeam, timePartecipation: Utils.TimePartecipationTeamTypes) {
+    fun changeTimePartecipation(
+        member: MemberInfoTeam,
+        timePartecipation: Utils.TimePartecipationTeamTypes
+    ) {
         teamField.membersField.changeTimeParticipation(member.profile, timePartecipation)
         viewModelScope.launch {
-            teamModel.memberInfoTeamModel.updateMemberInfoTeamTimePartecipation(member.id, timePartecipation)
+            teamModel.memberInfoTeamModel.updateMemberInfoTeamTimePartecipation(
+                member.id,
+                timePartecipation
+            )
         }
     }
-
 
     var isOpenedCamera by mutableStateOf(false)
     fun exitCameraMode() {
@@ -138,27 +242,6 @@ class TeamViewModel(
     }
 
     val descriptionField = DescriptionFieldViewModel(team.description)
-    val tasksList = mutableStateListOf<TaskViewModel>().apply { addAll(team.tasksList) }
-
-    val numberCompletedTask by derivedStateOf {
-        tasksList.count {
-            it.statusField.status == Utils.StatusEnum.DONE && (it.creationField.createdBy.id == Utils.memberAccessed.value.id ||
-                    it.delegateTasksField.members.any { p -> p.profile.id == Utils.memberAccessed.value.id })
-        }
-    }
-
-    val numberAssignedTask by derivedStateOf {
-        tasksList.count {
-            it.creationField.createdBy.id == Utils.memberAccessed.value.id ||
-                    it.delegateTasksField.members.any { p -> p.profile.id == Utils.memberAccessed.value.id }
-        }
-    }
-
-    val grade by derivedStateOf {
-        val numberAssignedTask = if (numberAssignedTask == 0) 1 else numberAssignedTask
-        (numberCompletedTask * 10) / numberAssignedTask
-    }
-
 
     var selectedTabIndex by mutableIntStateOf(0)
     var searchByNameField by mutableStateOf("")
@@ -280,7 +363,6 @@ class TeamViewModel(
             ),
             description = descriptionField.value,
             requestsList = teamField.requestsTeamField.requests,
-            tasksList = tasksList,
         )
     }
 

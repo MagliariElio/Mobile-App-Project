@@ -41,6 +41,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -77,11 +78,13 @@ import java.time.LocalDateTime
 fun StatisticsPage(teamVm: TeamViewModel, routerActions: RouterActions) {
     val scrollState = rememberScrollState()
     var selectedStatisticsMember by remember { mutableStateOf<MemberInfoTeam?>(null) }
-    var tasksFiltered by remember { mutableStateOf(teamVm.tasksList.toMutableList()) }
+    var tasksFiltered by remember { mutableStateOf(teamVm.tasksList.value.toMutableList()) }
+
+    val tasksListValue = teamVm.tasksList.collectAsState().value
 
     LaunchedEffect(selectedStatisticsMember) {
         tasksFiltered = if (selectedStatisticsMember != null) {
-            teamVm.tasksList
+            tasksListValue
                 .filter {
                     it.creationField.createdBy.nickname == selectedStatisticsMember?.profile?.nickname ||
                             it.delegateTasksField.members.any { member ->
@@ -89,7 +92,7 @@ fun StatisticsPage(teamVm: TeamViewModel, routerActions: RouterActions) {
                             }
                 }.toMutableList()
         } else {
-            teamVm.tasksList.toMutableList()
+            tasksListValue.toMutableList()
         }
     }
 
