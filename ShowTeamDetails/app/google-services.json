@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "1021163398469",
+    "project_id": "synchrotask-g01",
+    "storage_bucket": "synchrotask-g01.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1021163398469:android:b2f8ae3477368c84338a2c",
+        "android_client_info": {
+          "package_name": "it.polito.students.showteamdetails"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1021163398469-ck8a685b8df1jhpacn2bkm6mmrm4idk0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "it.polito.students.showteamdetails",
+            "certificate_hash": "dc071c6ab28c504bdd2d966667fc4a9efbbb5c51"
+          }
+        },
+        {
+          "client_id": "1021163398469-ntp5dmfsjv03pnqaurfqiks7sfcvcu5o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "it.polito.students.showteamdetails",
+            "certificate_hash": "3ea3a111edb5c8cd5b33a12d997ad79a336d59b4"
+          }
+        },
+        {
+          "client_id": "1021163398469-odmjtvaidkn5aqtjl104dt5i2getmfrm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "it.polito.students.showteamdetails",
+            "certificate_hash": "b560e95c63f07fc0af69fb2be9369a37d44f189f"
+          }
+        },
+        {
+          "client_id": "1021163398469-jfjhtfqmc4j28fp0lns8j2ihmgm955jr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHYaUbXitBcge70zO6BDRzoVRCcWIsbeU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1021163398469-jfjhtfqmc4j28fp0lns8j2ihmgm955jr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

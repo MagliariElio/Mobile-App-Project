@@ -1,0 +1,423 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="anonymous_user" translatable="true">Anonymer Benutzer</string>
+    <string name="empty_list" translatable="true">Die Liste ist noch leer.</string>
+    <string name="go_to_fill_edit_page" translatable="true">Bitte gehen Sie zur Bearbeitungsseite, um sie auszufüllen!</string>
+    <string name="languages_title" translatable="true">Sprachen</string>
+    <string name="tasks_list" translatable="true">Aufgabenliste</string>
+    <string name="technical_skills_title" translatable="true">Technische Fähigkeiten</string>
+    <string name="task_status" translatable="true">%1$d abgeschlossene Aufgaben / %2$d zugewiesen</string>
+    <string name="bio_title" translatable="true">Biografie</string>
+    <string name="teams_title" translatable="true">Teams</string>
+    <string name="skills_title" translatable="true">Fähigkeiten</string>
+    <string name="reviews_title" translatable="true">Bewertungen</string>
+    <string name="location" translatable="true">Ort</string>
+    <string name="telephone" translatable="true">Telefon</string>
+    <string name="number_teams_member" translatable="true">Mitglied von %1$d Teams</string>
+    <string name="team_picture_profile" translatable="true">Teambildprofil</string>
+    <string name="task_icon" translatable="true">Aufgaben-Symbol</string>
+    <string name="avatar" translatable="true">Avatar</string>
+    <string name="image_profile" translatable="true">Bildprofil</string>
+    <string name="birthday" translatable="true">Geburtstag</string>
+    <string name="gender" translatable="true">Geschlecht</string>
+    <string name="mail" translatable="true">Mail</string>
+    <string name="cancel" translatable="true">Abbrechen</string>
+    <string name="ok" translatable="true" tools:ignore="ButtonCase,Typos">Ok</string>
+    <string name="profile" translatable="true">Profil</string>
+    <string name="address" translatable="true">Adresse</string>
+    <string name="edit_profile_information" translatable="true">Profilinformationen bearbeiten</string>
+    <string name="personal_information" translatable="true">Persönliche Informationen</string>
+    <string name="biography" translatable="true">Biografie</string>
+    <string name="account" translatable="true">Konto</string>
+    <string name="save" translatable="true">Speichern</string>
+    <string name="unsaved_changes" translatable="true">Ungespeicherte Änderungen</string>
+    <string name="confirm_discard_changes" translatable="true">Möchten Sie die Änderungen verwerfen und zur vorherigen Seite zurückkehren?</string>
+    <string name="discard_changes" translatable="true">Änderungen verwerfen!</string>
+    <string name="keep_editing" translatable="true">Bearbeiten fortsetzen!</string>
+    <string name="name" translatable="true">Name</string>
+    <string name="surname" translatable="true">Nachname</string>
+    <string name="add_new_skill" translatable="true">Neue technische Fähigkeit hinzufügen</string>
+    <string name="select_language" translatable="true">Sprache auswählen</string>
+    <string name="beginner_A1" translatable="true">Anfänger (A1)</string>
+    <string name="elementary_A2" translatable="true">Elementar (A2)</string>
+    <string name="intermediate_B1" translatable="true">Mittelstufe (B1)</string>
+    <string name="upper_intermediate_B2" translatable="true">Oberstufe (B2)</string>
+    <string name="advanced_C1" translatable="true">Fortgeschritten (C1)</string>
+    <string name="proficiency_C2" translatable="true">Beherrscht (C2)</string>
+    <string name="select_level" translatable="true">Ein Level auswählen</string>
+    <string name="old_password" translatable="true">Altes Passwort</string>
+    <string name="hide_password" translatable="true">Passwort ausblenden</string>
+    <string name="show_password" translatable="true">Passwort anzeigen</string>
+    <string name="new_password" translatable="true">Neues Passwort</string>
+    <string name="repeat_password" translatable="true">Passwort wiederholen</string>
+    <string name="status" translatable="true">Status</string>
+    <string name="online" translatable="true">Online</string>
+    <string name="offline" translatable="true">Offline</string>
+    <string name="privateInfo" translatable="true">Privat</string>
+    <string name="publicInfo" translatable="true">Öffentlich</string>
+    <string name="edit_photo" translatable="true">Profilfoto bearbeiten</string>
+    <string name="rotate_photo" translatable="true">Profilfoto drehen</string>
+    <string name="take_photo" translatable="true">Foto aufnehmen</string>
+    <string name="come_back" translatable="true">Zurückkehren</string>
+    <string name="switch_camera" translatable="true">Kamera wechseln</string>
+    <string name="remove_photo" translatable="true">Entfernen</string>
+    <string name="delete_photo" translatable="true">Foto löschen</string>
+    <string name="keep_photo" translatable="true">Foto behalten</string>
+    <string name="confirm_delete_photo" translatable="true">Möchten Sie das Foto wirklich löschen?</string>
+
+    <string name="title_blank_error" translatable="true">Titel darf nicht leer sein!</string>
+    <string name="at_least_2_characters" translatable="true">Name muss mindestens 2 Zeichen lang sein!</string>
+    <string name="no_digits" translatable="true">Name darf keine Zahlen enthalten!</string>
+    <string name="no_digits_tag_error" translatable="true">Tag darf keine Zahlen enthalten!</string>
+    <string name="date_blank_error" translatable="true">Datum darf nicht leer sein!</string>
+    <string name="time_blank_error" translatable="true">Zeit darf nicht leer sein!</string>
+    <string name="repeat_blank_error" translatable="true">Wiederholungsfeld darf nicht leer sein!</string>
+    <string name="create_new_task" translatable="true">Neue Aufgabe erstellen</string>
+    <string name="modify_task" translatable="true">Aufgabe bearbeiten</string>
+    <string name="title" translatable="true">Titel</string>
+    <string name="start_date" translatable="true">Startdatum</string>
+    <string name="start_time" translatable="true">Startzeit</string>
+    <string name="due_date" translatable="true">Fälligkeitsdatum</string>
+    <string name="due_time" translatable="true">Fälligkeitszeit</string>
+    <string name="select_time" translatable="true">Zeit auswählen</string>
+    <string name="repeat" translatable="true">Wiederholung</string>
+    <string name="edit_icon" translatable="true">Symbol bearbeiten</string>
+    <string name="assign_tags" translatable="true">Tags zuweisen</string>
+    <string name="assign_here_tags" translatable="true">Hier zuweisen</string>
+    <string name="delete_task" translatable="true">Aufgabe löschen</string>
+    <string name="description_task" translatable="true">Beschreibung</string>
+    <string name="category" translatable="true">Kategorie</string>
+    <string name="management_category" translatable="true">Management</string>
+    <string name="administrative_category" translatable="true">Verwaltung</string>
+    <string name="finance_category" translatable="true">Finanzen</string>
+    <string name="marketing_category" translatable="true">Marketing</string>
+    <string name="human_resource_category" translatable="true">Personalwesen</string>
+    <string name="it_support_category" translatable="true">IT-Unterstützung</string>
+    <string name="logistics_category" translatable="true">Logistik</string>
+    <string name="customer_service_category" translatable="true">Kundendienst</string>
+    <string name="executive_leader_role" translatable="true">Führungskraft</string>
+    <string name="administrative_supporter_role" translatable="true">Administrativer Unterstützer</string>
+    <string name="technology_and_it_manager_role" translatable="true">Technologie- und IT-Manager</string>
+    <string name="sales_and_marketing_leader_role" translatable="true">Verkaufs- und Marketingleiter</string>
+    <string name="operational_and_technical_staffer_role" translatable="true">Operativer und technischer Mitarbeiter</string>
+    <string name="select_member" translatable="true">Mitglied auswählen</string>
+    <string name="recurrence" translatable="true">Wiederholung</string>
+    <string name="repeat_task" translatable="true">Wiederholen</string>
+    <string name="no_repeat" translatable="true">Keine Wiederholung</string>
+    <string name="daily_repeat" translatable="true">Täglich</string>
+    <string name="weekly_repeat" translatable="true">Wöchentlich</string>
+    <string name="monthly_repeat" translatable="true">Monatlich</string>
+    <string name="yearly_repeat" translatable="true">Jährlich</string>
+    <string name="delegate_tasks" translatable="true">Aufgaben delegieren</string>
+    <string name="delegates" translatable="true">Delegierte</string>
+    <string name="any_tags" translatable="true">Es gibt keine Tags hier!</string>
+    <string name="tags" translatable="true">Tags</string>
+    <string name="pending_status" translatable="true">Ausstehend</string>
+    <string name="in_progress_status" translatable="true">In Bearbeitung</string>
+    <string name="on_hold_status" translatable="true">In Wartestellung</string>
+    <string name="overdue_status" translatable="true">Überfällig</string>
+    <string name="done_status" translatable="true">Erledigt</string>
+    <string name="upload_file" translatable="true">Datei hochladen</string>
+    <string name="info_page" translatable="true">Info</string>
+    <string name="comments_page" translatable="true">Kommentare</string>
+    <string name="history_page" translatable="true">Verlauf</string>
+    <string name="files_page" translatable="true">Dateien</string>
+    <string name="no_tasks_having" translatable="true">Es gibt keine Aufgaben mit dem </string>
+    <string name="create_one_to_start" translatable="true">Erstellen Sie eine, um zu beginnen!</string>
+    <string name="attachments" translatable="true">Anhänge</string>
+    <string name="file_icon" translatable="false">Dateisymbol</string>
+    <string name="delete_file" translatable="true">Datei löschen</string>
+    <string name="download_file" translatable="true">Datei herunterladen</string>
+    <string name="uploaded_by_file" translatable="true">Hochgeladen von</string>
+    <string name="file_size" translatable="true">Größe</string>
+    <string name="content_type_file" translatable="true">Inhaltstyp</string>
+    <string name="other" translatable="true">Andere</string>
+    <string name="upload_date" translatable="true">Hochgeladen</string>
+    <string name="more" translatable="true">mehr</string>
+    <string name="link_label" translatable="true">Link</string>
+    <string name="add_link" translatable="true">Link hinzufügen</string>
+    <string name="download_link" translatable="true">Link herunterladen</string>
+    <string name="delete_link" translatable="true">Link löschen</string>
+    <string name="link_icon" translatable="false">Linksymbol</string>
+    <string name="create_task" translatable="true">Aufgabe erstellen</string>
+    <string name="resolve_error" translatable="true">Kann nicht speichern, Fehler beheben!</string>
+    <string name="change_status_task" translatable="true">Aufgabenstatus ändern</string>
+    <string name="search_task_by_name" translatable="true">Aufgabe nach Namen suchen</string>
+    <string name="delete_field" translatable="true">Feld löschen</string>
+    <string name="interval_type_day" translatable="true">Tag</string>
+    <string name="interval_type_week" translatable="true">Woche</string>
+    <string name="interval_type_month" translatable="true">Monat</string>
+    <string name="interval_type_year" translatable="true">Jahr</string>
+    <string name="type" translatable="true">Typ</string>
+    <string name="customize_repeat" translatable="true">Wiederholung anpassen</string>
+    <string name="until_repeat" translatable="true">Bis zur Wiederholung</string>
+    <string name="close" translatable="true">Schließen</string>
+    <string name="repeat_end_date" translatable="true">Bis zum </string>
+    <string name="see_more" translatable="true">Mehr anzeigen </string>
+    <string name="delete_comment" translatable="true">Kommentar löschen </string>
+    <string name="task_filter" translatable="true">Aufgabenfilter</string>
+    <string name="task_sorting" translatable="true">Aufgaben sortieren</string>
+    <string name="collapse_filter_field_dropdown_menu" translatable="true">Filterfeld Dropdown-Menü ausblenden</string>
+    <string name="expand_filter_field_dropdown_menu" translatable="true">Filterfeld Dropdown-Menü erweitern</string>
+    <string name="collapse_sorting_field_dropdown_menu" translatable="true">Sortierfeld Dropdown-Menü ausblenden</string>
+    <string name="expand_sorting_field_dropdown_menu" translatable="true">Sortierfeld Dropdown-Menü erweitern</string>
+    <string name="create_comment" translatable="true">Neuen Kommentar erstellen</string>
+    <string name="select_category" translatable="false">Kategorie auswählen</string>
+    <string name="attachments_subtitle_description" translatable="true">Fügen Sie Dateien oder Links mühelos hinzu. Wechseln Sie mühelos zwischen den beiden Optionen mit dem Umschalter.</string>
+    <string name="edit_delete_menu" translatable="true">Menü</string>
+    <string name="no_comment" translatable="true">Es liegen keine Kommentare für diese Aufgabe vor!</string>
+    <string name="no_links_or_files" translatable="true">Es liegen keine Dateien oder Links für diese Aufgabe vor!</string>
+    <string name="delete_task_confirm" translatable="true">Möchten Sie diese Aufgabe wirklich löschen?</string>
+    <string name="new_message" translatable="true">Neue Nachricht</string>
+    <string name="from" translatable="true">Von</string>
+    <string name="to" translatable="true">An</string>
+    <string name="select_task_ordering">Aufgabenreihenfolge auswählen</string>
+    <string name="descending_task_name">Absteigender Aufgabenname</string>
+    <string name="ascending_task_name">Aufsteigender Aufgabenname</string>
+    <string name="ascending_creation_date">Aufsteigendes Erstellungsdatum</string>
+    <string name="descending_creation_date">Absteigendes Erstellungsdatum</string>
+    <string name="ascending_due_date">Aufsteigendes Fälligkeitsdatum</string>
+    <string name="descending_due_date">Absteigendes Fälligkeitsdatum</string>
+    <string name="ascending_delegates_number">Aufsteigende Anzahl an Delegierten</string>
+    <string name="descending_delegates_number">Absteigende Anzahl an Delegierten</string>
+    <string name="select_task_filter">Aufgabenfilter auswählen</string>
+    <string name="late_tasks">Verspätete Aufgaben</string>
+    <string name="my_assigned_tasks">Mir zugewiesene Aufgaben</string>
+    <string name="my_created_tasks">Von mir erstellte Aufgaben</string>
+    <string name="delete_file_confirm" translatable="true">Sind Sie sicher, dass Sie diese Datei löschen möchten?</string>
+    <string name="delete_link_confirm">Sind Sie sicher, dass Sie diesen Link löschen möchten?</string>
+    <string name="deleted_file">Eine Datei gelöscht</string>
+    <string name="deleted_link">Einen Link gelöscht</string>
+    <string name="created_task">Aufgabe erstellt</string>
+    <string name="added_comment">Kommentar hinzugefügt</string>
+    <string name="uploaded_file">Datei hochgeladen</string>
+    <string name="uploaded_link">Link hochgeladen</string>
+    <string name="title_blank" translatable="true">Der Titel darf nicht leer sein!</string>
+    <string name="title_too_short" translatable="true">Der Titel muss mindestens 2 Zeichen lang sein!</string>
+    <string name="title_too_long" translatable="true">Der Titel ist zu lang (maximal 200 Zeichen)!</string>
+    <string name="title_invalid" translatable="true">Der Titel darf nur alphanumerische Zeichen und Leerzeichen enthalten!</string>
+    <string name="due_date_past" translatable="true">Es ist nicht möglich, ein vergangenes Datum auszuwählen.</string>
+    <string name="due_date_future" translatable="true">Das Startdatum darf nicht später als das Enddatum sein.</string>
+    <string name="start_date_future" translatable="true">Die Startzeit darf nicht später als die Endzeit sein.</string>
+    <string name="due_date_invalid" translatable="true">Das Enddatum darf nicht früher als das Startdatum sein.</string>
+    <string name="due_time_invalid" translatable="true">Das Enddatum und die -zeit müssen später als das Startdatum und die -zeit sein.</string>
+    <string name="end_date_invalid" translatable="true">Das Enddatum muss in der Zukunft liegen</string>
+    <string name="description_blank" translatable="true">Die Beschreibung darf nicht leer sein!</string>
+    <string name="description_not_too_long" translatable="true">Die Beschreibung darf maximal 1000 Zeichen lang sein!</string>
+    <string name="category_blank" translatable="true">Die Kategorie darf nicht leer sein!</string>
+    <string name="duplicate_tags" translatable="false">Doppelte Tags:  %1$s</string>
+    <string name="invalid_tag" translatable="true">Ungültiges Tag-Format</string>
+    <string name="duplicate_tag" translatable="true">Tag existiert bereits</string>
+    <string name="too_many_tags" translatable="true">Ein Tag kann maximal 3 Wörter haben</string>
+    <string name="member_already_in_list" translatable="true">Dieses Mitglied befindet sich bereits in der Delegiertenliste!</string>
+    <string name="no_member" translatable="true">Es muss mindestens ein Mitglied hinzugefügt werden, um die Aufgabe zu delegieren!</string>
+    <string name="invalid_url" translatable="true">Ungültige URL. Bitte geben Sie eine gültige URL ein.</string>
+    <string name="link_already_in_list" translatable="true">Dieser Link befindet sich bereits in der Linkliste!</string>
+    <string name="delete_message">Nachricht löschen</string>
+    <string name="are_you_sure_delete_message">Sind Sie sicher, diese Nachricht zu löschen?</string>
+    <string name="me">Ich</string>
+    <string name="recurring_task" translatable="true">Dies ist eine wiederkehrende Aufgabe!</string>
+    <string name="change_recurring_tasks" translatable="true">Möchten Sie die Änderungen nur auf diese Aufgabe oder auf alle nächsten wiederkehrenden Aufgaben anwenden?</string>
+    <string name="only_this_task" translatable="true">Nur diese</string>
+    <string name="all_recurring_tasks" translatable="true">Alle</string>
+    <string name="task_created_by" translatable="true">Aufgabe erstellt von </string>
+    <string name="cannot_select_post_date" translatable="true">Kann kein Datum nach dem Ende des Bereichs auswählen</string>
+    <string name="cannot_select_prev_date" translatable="true">Datum vor Beginn des Bereichs kann nicht ausgewählt werden</string>
+    <string name="comment_blank" translatable="true">Der Kommentar darf nicht leer sein!</string>
+    <string name="add_comment" translatable="true">Kommentar hinzufügen</string>
+    <string name="delete_recurring_tasks" translatable="true">Möchtest du nur diese Aufgabe löschen oder alle wiederkehrenden Aufgaben?</string>
+
+    <string name="modify_delegate" translatable="true">hat den Delegierten gewechselt</string>
+    <string name="modify_category" translatable="true">habe die Kategorie geändert</string>
+    <string name="modify_title" translatable="true">habe den Titel geändert</string>
+    <string name="modify_description" translatable="true">habe die Beschreibung geändert</string>
+    <string name="modify_tag" translatable="true">habe den Tag geändert</string>
+    <string name="modify_start_date" translatable="true">das Startdatum geändert</string>
+    <string name="modify_start_time" translatable="true">die Startzeit geändert</string>
+    <string name="modify_due_date" translatable="true">das Enddatum geändert</string>
+    <string name="modify_due_time" translatable="true">die Endzeit geändert</string>
+
+    <string name="category_work" translatable="true">Arbeit</string>
+    <string name="category_project" translatable="true">Projekt</string>
+    <string name="category_study" translatable="true">Studium</string>
+    <string name="category_research" translatable="true">Forschung</string>
+    <string name="category_development" translatable="true">Entwicklung</string>
+    <string name="category_innovation" translatable="true">Innovation</string>
+    <string name="category_marketing" translatable="true">Marketing</string>
+    <string name="category_sales" translatable="true">Verkauf</string>
+    <string name="category_support" translatable="true">Unterstützung</string>
+    <string name="category_training" translatable="true">Training</string>
+    <string name="category_creativity" translatable="true">Kreativität</string>
+    <string name="category_analysis" translatable="true">Analyse</string>
+    <string name="category_events" translatable="true">Veranstaltungen</string>
+    <string name="category_administration" translatable="true">Verwaltung</string>
+    <string name="category_technology" translatable="true">Technologie</string>
+    <string name="category_production" translatable="true">Produktion</string>
+    <string name="category_quality" translatable="true">Qualität</string>
+    <string name="category_sustainability" translatable="true">Nachhaltigkeit</string>
+    <string name="category_leisure" translatable="true">Freizeit</string>
+
+    <string name="version" translatable="true">Ausführung</string>
+    <string name="copy_right" translatable="true">Urheberrechte</string>
+    <string name="add_team">Team hinzufügen</string>
+    <string name="chat">Chat</string>
+    <string name="about_us">Über uns</string>
+    <string name="log_out">Ausloggen</string>
+    <string name="add_task">Aufgabe hinzufügen</string>
+    <string name="tasks">Aufgaben</string>
+    <string name="statistics">Statistiken</string>
+    <string name="requests">Anfragen</string>
+    <string name="create_team">Team erstellen</string>
+    <string name="team_members">Team Members</string>
+    <string name="completeness" translatable="true">Vollständigkeit</string>
+    <string name="search" translatable="true">Suche</string>
+    <string name="new_members_requests" translatable="true">Neue Mitgliederanfragen</string>
+    <string name="preview" translatable="true">Vorschau</string>
+    <string name="wants_join_team" translatable="true">möchte Ihrem Team beitreten.</string>
+    <string name="do_you_agree" translatable="true">Sind Sie einverstanden?</string>
+    <string name="reject" translatable="true">Ablehnen</string>
+    <string name="accept" translatable="true">Akzeptieren</string>
+    <string name="add_chat" translatable="true">Neuer chat</string>
+    <string name="role" translatable="true">Rolle</string>
+    <string name="role_blank" translatable="true">Die Rolle darf nicht leer sein!</string>
+    <string name="assign_role" translatable="true">Eine Rolle zuweisen</string>
+    <string name="back" translatable="true">Zurück</string>
+    <string name="finish" translatable="true">Fertig</string>
+    <string name="join_team" translatable="true">Sind Sie sicher, dass Sie diesem Team beitreten möchten?</string>
+    <string name="join" translatable="true">Beitreten</string>
+    <string name="leave_team_confirmation" translatable="true">Sind Sie sicher, dass Sie dieses Team verlassen möchten?</string>
+    <string name="leave" translatable="true">Verlassen</string>
+    <string name="remove_member" translatable="true">Sind Sie sicher, dass Sie ihn aus diesem Team entfernen möchten?</string>
+    <string name="qr_code_error" translatable="true">Der QR-Code konnte nicht generiert werden. Bitte versuchen Sie es später erneut.</string>
+    <string name="qr_code_advice_message" translatable="true">Tippen Sie, um den QR-Code oder den Link zu kopieren und mit anderen zu teilen.</string>
+    <string name="copy_link" translatable="true">Link kopieren</string>
+    <string name="go_back" translatable="true">Zurück</string>
+    <string name="share_team" translatable="true">Team teilen</string>
+    <string name="share_qr_code" translatable="true">QR-Code des Teams teilen</string>
+
+    <string name="add" translatable="true">Hinzufügen</string>
+    <string name="no_teams">Es gibt keine Teams. Scannen Sie einen QR-Code, um auf ein Team zuzugreifen.</string>
+    <string name="delete_team" translatable="true">Team Löschen</string>
+    <string name="delete_team_confirm" translatable="true">Sind Sie sicher, dass Sie dieses Team löschen möchten?</string>
+    <string name="search_member_by_name" translatable="true">Mitglied nach Namen suchen</string>
+    <string name="any_member_with_this_name" translatable="true">Es gibt keine Mitglieder mit diesem Namen!</string>
+    <string name="name_blank" translatable="true">Name darf nicht leer sein!</string>
+    <string name="name_too_short" translatable="true">Name muss mindestens 2 Zeichen lang sein!</string>
+    <string name="name_invalid" translatable="true">Name darf keine Sonderzeichen oder Ziffern enthalten!</string>
+    <string name="surname_blank" translatable="true">Nachname darf nicht leer sein!</string>
+    <string name="surname_too_short" translatable="true">Nachname muss mindestens 2 Zeichen lang sein!</string>
+    <string name="surname_invalid" translatable="true">Nachname darf keine Sonderzeichen oder Ziffern enthalten!</string>
+    <string name="phone_number_blank" translatable="true">Telefonnummer darf nicht leer sein!</string>
+    <string name="phone_number_invalid" translatable="true">Ungültige Telefonnummer!</string>
+    <string name="male" translatable="true">Männlich</string>
+    <string name="female" translatable="true">Weiblich</string>
+    <string name="not_binary" translatable="true">Nicht binär</string>
+    <string name="prefer_not_to_say" translatable="true">Möchte ich nicht angeben</string>
+    <string name="error_gender" translatable="true">Etwas stimmt mit dem Geschlechtswert nicht!</string>
+    <string name="members" translatable="true">mitglieder</string>
+    <string name="today" translatable="true">Heute</string>
+    <string name="yesterday" translatable="true">Gestern</string>
+    <string name="leave_team" translatable="true">Team verlassen</string>
+    <string name="team_settings" translatable="true">Teameinstellungen</string>
+    <string name="delete" translatable="true">Löschen</string>
+    <string name="delete_team_warning" translatable="true">Dies wird alle Informationen über das Team dauerhaft löschen</string>
+    <string name="delete_team_warning_detail" translatable="true">, einschließlich aller Statistiken. Außerdem werden alle Teammitglieder aus dem Team entfernt.</string>
+    <string name="filter_by">Filtern nach</string>
+    <string name="team_created_by">Team erstellt von</string>
+    <string name="creation_date">Erstellungsdatum</string>
+    <string name="any_requests_with_this_name" translatable="true">Es gibt keine Anfragen mit diesem Namen!</string>
+    <string name="edit_message">Nachricht bearbeiten</string>
+    <string name="unread_messages">Ungelesenen nachrichten</string>
+    <string name="edited">bearbeitet</string>
+    <string name="delete_message_confirm">Sind Sie sicher, dass Sie diese Nachricht für alle löschen möchten?</string>
+    <string name="profile_page">Profilseite</string>
+    <string name="team_page">Teamseite</string>
+    <string name="delete_chat">Chat löschen</string>
+    <string name="delete_chat_confirm">Sind Sie sicher, dass Sie diesen Chat löschen möchten? Dieser Vorgang ist irreversibel, aber der andere Benutzer kann weiterhin alle Nachrichten sehen.</string>
+    <string name="participants">Teilnehmer</string>
+    <string name="teams_in_common">Teams gemeinsam</string>
+    <string name="select_photo">Ein Bild aus der Fotogalerie auswählen</string>
+    <string name="link_copied">Link in die Zwischenablage kopiert</string>
+    <string name="address_blank" translatable="true">Die Adresse darf nicht leer sein!</string>
+    <string name="address_complete" translatable="true">Die Adresse sollte mindestens Straße, Hausnummer und Stadt enthalten!</string>
+    <string name="address_commas" translatable="true">Die Adresse sollte Kommas enthalten, um die Teile zu trennen!</string>
+    <string name="characters" translatable="true">Die Biografie darf maximal 500 Zeichen lang sein!</string>
+    <string name="skills_blank" translatable="true">Die Liste der technischen Fähigkeiten darf nicht leer sein!</string>
+    <string name="languages_skills_blank" translatable="true">Die Liste der Sprachkenntnisse darf nicht leer sein!</string>
+    <string name="mail_blank" translatable="true">E-Mail darf nicht leer sein!</string>
+    <string name="mail_invalid" translatable="true">Ungültiges E-Mail-Format!</string>
+    <string name="old_password_blank" translatable="true">Das alte Passwort darf nicht leer sein!</string>
+    <string name="old_password_incorrect" translatable="true">Falsches Passwort</string>
+    <string name="no_role_assigned">Keine Rolle zugewiesen</string>
+    <string name="full_time">Vollzeit</string>
+    <string name="part_time">Teilzeit</string>
+    <string name="time_participation">Teamzeitbeteiligung</string>
+    <string name="filter_by_member">Nach Mitglied filtern</string>
+    <string name="status_task">Aufgabenstatus</string>
+    <string name="no_data_ranking">Derzeit ist keine Rangliste verfügbar, da keine Aufgaben in der </string>
+    <string name="tasks_completed">Aufgaben abgeschlossen</string>
+    <string name="ranking">Rangliste</string>
+    <string name="position_label">Pos.</string>
+    <string name="member">Mitglied</string>
+    <string name="process_ends">Der Prozess endet in </string>
+    <string name="days">Tagen</string>
+    <string name="clear">Löschen</string>
+    <string name="completed">abgeschlossen</string>
+    <string name="process_is">Der Prozess ist </string>
+    <string name="average_time_per_task">Durchschnittliche Zeit pro Aufgabe</string>
+    <string name="in_hours">In Stunden</string>
+    <string name="average">Durchschnitt</string>
+    <string name="hours">Stunden</string>
+    <string name="process_was_supposed">Der Prozess sollte abgeschlossen sein</string>
+    <string name="ago">vor</string>
+    <string name="delete_review" translatable="true">Bewertung löschen</string>
+    <string name="new_review" translatable="true">Neue Bewertung</string>
+    <string name="no_reviews" translatable="true">Es gibt keine Bewertungen für diesen Benutzer!</string>
+    <string name="add_review" translatable="true">Eine Bewertung hinzufügen</string>
+    <string name="new_password_blank">Das neue Passwort darf nicht leer sein!</string>
+    <string name="new_password_len">Das Passwort muss mindestens 8 Zeichen lang sein!</string>
+    <string name="password_lowercase">Das Passwort muss mindestens einen Kleinbuchstaben enthalten!</string>
+    <string name="password_uppercase">Das Passwort muss mindestens einen Großbuchstaben enthalten!</string>
+    <string name="password_digits">Das Passwort muss mindestens eine Ziffer enthalten!</string>
+    <string name="password_special_char">Das Passwort muss mindestens ein Sonderzeichen enthalten!</string>
+    <string name="repeat_password_blank">Das Wiederholungspasswort darf nicht leer sein!</string>
+    <string name="repeat_password_not_match">Die Passwörter stimmen nicht überein!</string>
+    <string name="reviews_blank">Die Bewertung darf nicht leer sein!</string>
+    <string name="assigned_tasks_completed" translatable="true">Zugewiesene Aufgaben abgeschlossen</string>
+    <string name="no_requests" translatable="true">Es gibt keine Anfragen!</string>
+    <string name="user_member">Sie sind bereits Mitglied des Teams!</string>
+    <string name="delete_delegate" translatable="true">hat %1$s %2$s aus der Aufgabe gelöscht</string>
+    <string name="left_team" translatable="true">hat das Team verlassen</string>
+    <string name="modified_comment" translatable="true">hat einen Kommentar geändert</string>
+    <string name="deleted_comment" translatable="true">hat einen Kommentar gelöscht</string>
+    <string name="modified_recurrence" translatable="true">hat die Wiederholung geändert</string>
+    <string name="no_permissions">Sie haben keine Berechtigung, neue Mitglieder zu akzeptieren oder abzulehnen.</string>
+    <string name="no_data_statistics">Es gibt keine Aufgaben, um die Statistiken zu berechnen!</string>
+    <string name="account_settings" translatable="true">Kontoeinstellungen</string>
+    <string name="settings" translatable="true">Einstellungen</string>
+    <string name="vibration" translatable="true">Vibration</string>
+    <string name="sound" translatable="true">Ton</string>
+    <string name="forgot_password" translatable="true">Haben Sie Ihr Passwort vergessen?</string>
+    <string name="sign_in_with_google" translatable="true">Anmeldung mit Google</string>
+    <string name="otherwise" translatable="true">Ansonsten</string>
+    <string name="date_of_birth" translatable="true">Geburtsdatum</string>
+    <string name="confirm_password" translatable="true">Bestätige das Passwort</string>
+    <string name="register" translatable="true">Anmelden</string>
+    <string name="cannot_add_chat" translatable="true">Sie können jetzt keinen neuen Chat starten!</string>
+    <string name="confirm" translatable="true">Bestätigen</string>
+    <string name="already_have_account" translatable="true">Sie haben bereits ein Konto?</string>
+    <string name="log_in" translatable="true">Anmeldung</string>
+    <string name="reset_code" translatable="true">Code zurücksetzen</string>
+    <string name="recovery_password" translatable="true">Passwort zum Zurücksetzen</string>
+    <string name="submit" translatable="true">Einreichen</string>
+    <string name="type_your_mail" translatable="true">Geben Sie Ihre E-Mail ein</string>
+    <string name="forgotten_password" translatable="true">Passwort vergessen</string>
+    <string name="nickname" translatable="true">Spitzname</string>
+    <string name="not_logged" translatable="true">Es scheint, dass du nicht eingeloggt bist! \nNutze Google, um dich anzumelden und unsere App zu nutzen!</string>
+
+    <string name="birthday_date">Das Geburtsdatum darf nicht in der Zukunft liegen!</string>
+    <string name="birthday_today">Das Geburtsdatum darf nicht heute sein! Du musst mindestens 18 Jahre alt sein!</string>
+    <string name="countdown_label">Läuft in %1$d Sekunden ab</string>
+    <string name="regenerate_qr">QR-Code neu generieren</string>
+    <string name="link_expired">Link ist abgelaufen</string>
+    <string name="unable_to_load_data_team_and_member">Fehler: Team- oder Mitgliederdaten konnten nicht geladen werden.</string>
+</resources>

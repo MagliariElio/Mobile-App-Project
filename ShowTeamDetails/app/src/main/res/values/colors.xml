@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="primary_color">#FF283D8F</color>
+    <color name="secondary_color">#FFB1B9FC</color>
+    <color name="attention_color">#FFFBD574</color>
+    <color name="red_error">#FF8F3838</color>
+    <color name="blue">#FF283D8F</color>
+    <color name="gray">#FFD9D9D9</color>
+    <color name="darkGray">#FF7D7D7D</color>
+    <color name="green">#FF43BB4F</color>
+    <color name="red">#FFAB4933</color>
+    <color name="redError">#FF8F3838</color>
+    <color name="yellow">#FFBCB853</color>
+    <color name="gray_2">#88A6A6A6</color>
+
+    <color name="cyan">#0cb2af</color>
+    <color name="light_green">#a1c65d</color>
+    <color name="light_yellow">#fac723</color>
+    <color name="orange">#f29222</color>
+    <color name="light_red">#e95e50</color>
+    <color name="purple">#936fac</color>
+</resources>
+
+    <!-- Use colors in this way:
+    val yellowBackground = colorResource(R.color.yellow)
+    -->
