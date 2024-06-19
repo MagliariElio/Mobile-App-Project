@@ -130,10 +130,15 @@ class TeamListViewModel(
         }
     }
 
-    fun joinTeamNewMember(teamId: String, memberId: String) {
+    fun joinTeamNewMember(teamId: String, memberId: String): Int {
+        var isSent = 0
         viewModelScope.launch {
-            teamModel.addTeamJoinRequests(teamId, memberId)
+            val teamVm = teamModel.getTeamById(teamId)
+            if (teamVm != null) {
+                isSent = teamModel.addTeamJoinRequests(teamVm, memberId)
+            }
         }
+        return isSent
     }
 
 }

@@ -5,6 +5,10 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.firestore
 import it.polito.students.showteamdetails.Utils
 import it.polito.students.showteamdetails.model.MemberInfoTeamModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 
 data class MemberInfoTeam(
     val profile: Member,
@@ -52,8 +56,12 @@ fun convertMemberInfoTeamListToMemberInfoTeamFirebaseList(memberInfoTeamList: Li
     return memberInfoTeamList.map { it.toMemberInfoTeamFirebaseDocumentReference() }
 }
 
-suspend fun convertMemberInfoTeamFirebaseListToMemberInfoTeamList(memberInfoTeamList: List<DocumentReference>): List<MemberInfoTeam> {
-    return memberInfoTeamList.mapNotNull {
-        MemberInfoTeamModel().getMemberInfoTeamById(it.id)
-    }
+suspend fun convertMemberInfoTeamFirebaseListToMemberInfoTeamList(
+    memberInfoTeamList: List<DocumentReference>
+): List<MemberInfoTeam> {
+    return memberInfoTeamList.map { ref ->
+        CoroutineScope(Dispatchers.IO).async {
+            MemberInfoTeamModel().getMemberInfoTeamById(ref.id)
+        }
+    }.awaitAll().filterNotNull()
 }

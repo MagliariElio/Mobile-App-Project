@@ -6,6 +6,10 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import it.polito.students.showteamdetails.Utils
 import it.polito.students.showteamdetails.model.MemberInfoTeamModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import java.time.LocalDateTime
 
 data class History(
@@ -57,12 +61,14 @@ suspend fun convertHistoryFirebaseListToHistoryList(
     usersList: List<Member>
 ): List<History> {
     return historyList.map { history ->
-        val member = usersList.find { it.id == history.member.id } ?: Utils.memberAccessed.value
+        CoroutineScope(Dispatchers.IO).async {
+            val member = usersList.find { it.id == history.member.id } ?: Utils.memberAccessed.value
 
-        val delegatedMember: MemberInfoTeam? =
-            if (history.delegatedMember == null) null else MemberInfoTeamModel().getMemberInfoTeamById(
-                history.delegatedMember?.id!!
-            )
-        history.toHistory(member, delegatedMember)
-    }
+            val delegatedMember: MemberInfoTeam? =
+                if (history.delegatedMember == null) null else MemberInfoTeamModel().getMemberInfoTeamById(
+                    history.delegatedMember?.id!!
+                )
+            history.toHistory(member, delegatedMember)
+        }
+    }.awaitAll()
 }

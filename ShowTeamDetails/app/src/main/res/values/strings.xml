@@ -426,6 +426,9 @@
     <string name="nickname_blank" translatable="true">Nickname cannot be blank!</string>
     <string name="nickname_too_short" translatable="true">Nickname should be at least 2 characters long!</string>
     <string name="nickname_invalid" translatable="true">Nickname cannot contain whitespaces!</string>
+    <string name="team_request_sent">The request was sent successfully!</string>
+    <string name="team_request_failed">The request failed!</string>
+    <string name="team_request_already_sent">The request has already been sent!</string>
 
 </resources>
 

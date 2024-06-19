@@ -301,9 +301,19 @@ class TeamModel(
         }
     }
 
-    suspend fun addTeamJoinRequests(teamId: String, memberId: String) {
+    /**
+     * @return:
+     *  - -1: Member request already exists
+     *  - 0: Error adding new member request
+     *  - 1: Member request added successfully
+     */
+    suspend fun addTeamJoinRequests(teamVm: TeamViewModel, memberId: String): Int {
+        if(teamVm.teamField.requestsTeamField.requests.any { it.id == memberId }) {
+            return -1
+        }
         try {
             withContext(Dispatchers.IO) {
+                val teamId = teamVm.teamField.id
                 teamCollection.document(teamId)
                     .update(
                         "requestsList",
@@ -311,8 +321,10 @@ class TeamModel(
                     ).await()
                 Log.d("SUCCESS", "Member request added successfully in team with id: $teamId")
             }
+            return 1
         } catch (e: Exception) {
             Log.e("ERROR", "Error adding new member request", e)
+            return 0
         }
     }
 

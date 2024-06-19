@@ -17,8 +17,6 @@ import it.polito.students.showteamdetails.entity.FirebaseReview
 import it.polito.students.showteamdetails.entity.Member
 import it.polito.students.showteamdetails.entity.Review
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -83,6 +81,149 @@ class UserModel {
     }
 
     fun getAllUsers(loggedUser: Member = Utils.memberAccessed.value): Flow<List<Member>> =
+        callbackFlow {
+            val listener = db.collection("users").addSnapshotListener { result, error ->
+                if (result != null) {
+                    launch {
+                        val fetchedUsers = mutableSetOf<Member>()
+                        val users = result.documents.mapNotNull { document ->
+                            withContext(Dispatchers.IO) {
+                                val firebaseMember = document.toObject(FirebaseMember::class.java)
+                                firebaseMember?.let {
+                                    val imageBitmap = if (it.imageUrl.isNotBlank()) {
+                                        loadPhotoFromStorage(it.imageUrl)
+                                    } else {
+                                        null
+                                    }
+                                    val member = Member(
+                                        id = document.id,
+                                        photo = imageBitmap,
+                                        name = it.name,
+                                        surname = it.surname,
+                                        email = it.email,
+                                        online = it.online,
+                                        password = "", // Don't store the password of the member inside the device
+                                        gender = Utils.Gender.valueOf(it.gender),
+                                        birthdate = it.birthdate.toDate().toInstant()
+                                            .atZone(ZoneId.systemDefault()).toLocalDate(),
+                                        nickname = it.nickname,
+                                        bio = it.bio,
+                                        address = it.address,
+                                        phoneNumber = it.phoneNumber,
+                                        technicalSkills = it.technicalSkills,
+                                        languages = it.languages.map { entry -> Locale(entry.key) to entry.value },
+                                        reviews = it.reviews.map { review ->
+                                            Review(
+                                                message = review.message,
+                                                createdBy = getUserByDocumentReference(
+                                                    review.createdBy,
+                                                    loggedUser,
+                                                    fetchedUsers
+                                                ),
+                                                dateCreation = review.dateCreation.toDate()
+                                                    .toInstant().atZone(ZoneId.systemDefault())
+                                                    .toLocalDateTime(),
+                                                dateModification = review.dateModification?.toDate()
+                                                    ?.toInstant()?.atZone(ZoneId.systemDefault())
+                                                    ?.toLocalDateTime()
+                                            )
+                                        },
+                                        privateBirthdate = it.privateBirthdate,
+                                        privatePhone = it.privatePhone,
+                                        privateEmail = it.privateEmail,
+                                        privateGender = it.privateGender,
+                                        sound = it.sound,
+                                        vibration = it.vibration,
+                                        language = Locale(it.language)
+                                    )
+                                    fetchedUsers.add(member)
+                                    member
+                                }
+                            }
+                        }
+                        trySend(users)
+                    }
+                } else if (error != null) {
+                    close(error)
+                }
+            }
+            awaitClose { listener.remove() }
+        }
+
+    suspend fun getUserByDocumentReference(
+        memberRef: DocumentReference,
+        loggedUser: Member,
+        fetchedMembers: MutableSet<Member>
+    ): Member = withContext(Dispatchers.IO) {
+        val memberId = memberRef.id
+
+        fetchedMembers.find { it.id == memberId }?.let { existingMember ->
+            return@withContext existingMember
+        }
+
+        val memberDocument = memberRef.get().await()
+        val firebaseMember = memberDocument.toObject(FirebaseMember::class.java)
+            ?: throw IllegalStateException("FirebaseMember ${memberDocument.id} is null")
+
+        val imageBitmap = if (firebaseMember.imageUrl.isNotBlank()) {
+            loadPhotoFromStorage(firebaseMember.imageUrl)
+        } else {
+            null
+        }
+
+        val member = Member(
+            id = memberId,
+            photo = imageBitmap,
+            name = firebaseMember.name,
+            surname = firebaseMember.surname,
+            email = firebaseMember.email,
+            online = firebaseMember.online,
+            password = firebaseMember.password,
+            gender = Utils.Gender.valueOf(firebaseMember.gender),
+            birthdate = firebaseMember.birthdate.toDate().toInstant().atZone(ZoneId.systemDefault())
+                .toLocalDate(),
+            nickname = firebaseMember.nickname,
+            bio = firebaseMember.bio,
+            address = firebaseMember.address,
+            phoneNumber = firebaseMember.phoneNumber,
+            technicalSkills = firebaseMember.technicalSkills,
+            languages = firebaseMember.languages.map { entry -> Locale(entry.key) to entry.value },
+            reviews = emptyList(),
+            privateEmail = firebaseMember.privateEmail,
+            privateBirthdate = firebaseMember.privateBirthdate,
+            privateGender = firebaseMember.privateGender,
+            privatePhone = firebaseMember.privatePhone,
+            sound = firebaseMember.sound,
+            vibration = firebaseMember.vibration,
+            language = Locale(firebaseMember.language)
+        )
+
+        fetchedMembers.add(member)
+
+        val createdByReviews = firebaseMember.reviews.map { review ->
+            val createdByMemberRef = review.createdBy
+            val createdBy =
+                getUserByDocumentReference(createdByMemberRef, loggedUser, fetchedMembers)
+
+            Review(
+                message = review.message,
+                createdBy = createdBy,
+                dateCreation = review.dateCreation.toDate().toInstant()
+                    .atZone(ZoneId.systemDefault()).toLocalDateTime(),
+                dateModification = review.dateModification?.toDate()?.toInstant()
+                    ?.atZone(ZoneId.systemDefault())?.toLocalDateTime()
+            )
+        }
+
+        member.copy(reviews = createdByReviews)
+    }
+
+
+    /*fun getAllUsers(loggedUser: Member = Utils.memberAccessed.value): Flow<List<Member>> {
+        return flowOf(listOf(Utils.memberAccessed.value))
+    }*/
+
+    /*fun getAllUsers(loggedUser: Member = Utils.memberAccessed.value): Flow<List<Member>> =
         callbackFlow {
             val listener = db.collection("users").addSnapshotListener { result, error ->
                 if (result != null) {
@@ -159,9 +300,17 @@ class UserModel {
             }
 
             awaitClose { listener.remove() }
-        }
+        }*/
 
-    suspend fun getUserByDocumentReference(
+    /*suspend fun getUserByDocumentReference(
+        memberRef: DocumentReference,
+        loggedUser: Member,
+        fetchedMembers: MutableSet<Member>
+    ): Member {
+        return Utils.memberAccessed.value
+    }*/
+
+    /*suspend fun getUserByDocumentReference(
         memberRef: DocumentReference,
         loggedUser: Member,
         fetchedMembers: MutableSet<Member>
@@ -240,9 +389,70 @@ class UserModel {
             // Update the reviews in the member object
             member.copy(reviews = createdByReviews)
         } ?: throw IllegalStateException("FirebaseMember ${memberDocument.id} is null")
-    }
+    }*/
 
-    suspend fun getAllUsersList(loggedUser: Member = Utils.memberAccessed.value): List<Member> {
+    /*suspend fun getAllUsersList(loggedUser: Member = Utils.memberAccessed.value): List<Member> {
+        return listOf(Utils.memberAccessed.value)
+    }*/
+
+    suspend fun getAllUsersList(loggedUser: Member = Utils.memberAccessed.value): List<Member> =
+        withContext(Dispatchers.IO) {
+            val fetchedUsers = mutableSetOf<Member>()
+            val result = db.collection("users").get().await()
+
+            result.documents.mapNotNull { document ->
+                val firebaseMember = document.toObject(FirebaseMember::class.java)
+                firebaseMember?.let {
+                    val imageBitmap =
+                        if (it.imageUrl.isNotBlank()) loadPhotoFromStorage(it.imageUrl) else null
+
+                    val reviews = it.reviews.map { review ->
+                        Review(
+                            message = review.message,
+                            createdBy = getUserByDocumentReference(
+                                review.createdBy,
+                                loggedUser,
+                                fetchedUsers
+                            ),
+                            dateCreation = review.dateCreation.toDate().toInstant()
+                                .atZone(ZoneId.systemDefault()).toLocalDateTime(),
+                            dateModification = review.dateModification?.toDate()?.toInstant()
+                                ?.atZone(ZoneId.systemDefault())?.toLocalDateTime()
+                        )
+                    }
+
+                    Member(
+                        id = document.id,
+                        photo = imageBitmap,
+                        name = it.name,
+                        surname = it.surname,
+                        email = it.email,
+                        online = it.online,
+                        password = "", // Don't store the password of the member inside the device
+                        gender = Utils.Gender.valueOf(it.gender),
+                        birthdate = it.birthdate.toDate().toInstant().atZone(ZoneId.systemDefault())
+                            .toLocalDate(),
+                        nickname = it.nickname,
+                        bio = it.bio,
+                        address = it.address,
+                        phoneNumber = it.phoneNumber,
+                        technicalSkills = it.technicalSkills,
+                        languages = it.languages.map { entry -> Locale(entry.key) to entry.value },
+                        reviews = reviews,
+                        privateBirthdate = it.privateBirthdate,
+                        privatePhone = it.privatePhone,
+                        privateEmail = it.privateEmail,
+                        privateGender = it.privateGender,
+                        sound = it.sound,
+                        vibration = it.vibration,
+                        language = Locale(it.language)
+                    ).also { member -> fetchedUsers.add(member) }
+                }
+            }
+        }
+
+
+    /*suspend fun getAllUsersList(loggedUser: Member = Utils.memberAccessed.value): List<Member> {
         val fetchedUsers: MutableSet<Member> = mutableSetOf()
         val users = db.collection("users").get().await().documents.mapNotNull { document ->
             val firebaseMember = document.toObject(FirebaseMember::class.java)
@@ -302,7 +512,7 @@ class UserModel {
         }
 
         return users
-    }
+    }*/
 
     suspend fun getUserByDocumentId(userId: String): Member? {
         val usersFlow = getAllUsersList() //getAllUsers()

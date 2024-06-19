@@ -26,7 +26,6 @@ import it.polito.students.showteamdetails.entity.Task
 import it.polito.students.showteamdetails.model.TaskModel
 import it.polito.students.showteamdetails.routers.RouterActions
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -787,7 +786,7 @@ class TagFieldViewModel(tagList: List<String>) {
     }
 }
 
-class FileUploadedFieldViewModel(listFileParam: List<File>) {
+class FileUploadedFieldViewModel(listFileParam: List<File>) : ViewModel() {
     val fileList = mutableStateListOf<File>()
         .apply { addAll(listFileParam) }
 
@@ -815,7 +814,7 @@ class FileUploadedFieldViewModel(listFileParam: List<File>) {
     }
 
     fun deleteFileSynch(file: File, taskId: String) {
-        runBlocking {
+        viewModelScope.launch {
             val isDeleted = TaskModel().deleteFile(file, taskId)
             if (isDeleted) {
                 fileList.remove(file)
@@ -825,7 +824,7 @@ class FileUploadedFieldViewModel(listFileParam: List<File>) {
     }
 
     fun addFileSynch(file: File, taskId: String) {
-        runBlocking {
+        viewModelScope.launch {
             val isAdded = TaskModel().addFile(file, taskId)
             if (isAdded) {
                 fileList.add(file)
@@ -843,7 +842,7 @@ class FileUploadedFieldViewModel(listFileParam: List<File>) {
     }
 }
 
-class StatusFieldViewModel(status: Utils.StatusEnum) {
+class StatusFieldViewModel(status: Utils.StatusEnum) : ViewModel() {
     var status by mutableStateOf(status)
         private set
 
@@ -853,7 +852,7 @@ class StatusFieldViewModel(status: Utils.StatusEnum) {
         status = statusParam
         editStatus = statusParam
 
-        runBlocking {
+        viewModelScope.launch {
             TaskModel().updateStatus(statusParam, taskId)
         }
     }
@@ -1021,7 +1020,7 @@ class MembersParticipationViewModel(membersList: List<MemberInfoTeam>) {
     }
 }
 
-class LinkListViewModel(linkList: List<Link>) {
+class LinkListViewModel(linkList: List<Link>) : ViewModel() {
     var links = mutableStateListOf<Link>().apply { addAll(linkList) }
         private set
 
@@ -1067,7 +1066,7 @@ class LinkListViewModel(linkList: List<Link>) {
             val link = Link(url, Utils.memberAccessed.value, LocalDateTime.now())
             editLinks.add(link)
             if (isSaveToo) {
-                runBlocking {
+                viewModelScope.launch {
                     val isAdded = TaskModel().addLink(link, taskId)
                     if (isAdded) {
                         links.add(link)
@@ -1080,7 +1079,7 @@ class LinkListViewModel(linkList: List<Link>) {
     }
 
     fun deleteLinksSynch(link: Link, taskId: String) {
-        runBlocking {
+        viewModelScope.launch {
             val isDeleted = TaskModel().deleteLink(link, taskId)
             if (isDeleted) {
                 links.remove(link)

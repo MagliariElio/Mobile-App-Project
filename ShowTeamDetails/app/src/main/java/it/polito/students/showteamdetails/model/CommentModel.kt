@@ -14,6 +14,8 @@ import it.polito.students.showteamdetails.entity.toComment
 import it.polito.students.showteamdetails.entity.toFirebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -109,25 +111,24 @@ class CommentModel {
         references: List<DocumentReference>,
         usersList: List<Member>
     ): List<Comment> {
-        val comments = mutableListOf<Comment>()
-
-        for (ref in references) {
-            try {
-                val documentSnapshot = ref.get().await()
-                if (documentSnapshot.exists()) {
-                    val comment = documentSnapshot.toObject<CommentFirebase>()
-                    if (comment != null) {
-                        val createBy = usersList.find { it.id == comment.createdBy.id }
-                            ?: Utils.memberAccessed.value
-                        comments.add(comment.toComment(createBy))
-                    }
+        return references.map { ref ->
+            CoroutineScope(Dispatchers.IO).async {
+                try {
+                    val documentSnapshot = ref.get().await()
+                    if (documentSnapshot.exists()) {
+                        val comment = documentSnapshot.toObject<CommentFirebase>()
+                        comment?.let {
+                            val createdBy = usersList.find { it.id == comment.createdBy.id }
+                                ?: Utils.memberAccessed.value
+                            comment.toComment(createdBy)
+                        }
+                    } else null
+                } catch (e: Exception) {
+                    Log.e("ERROR", "Error getting comment", e)
+                    null
                 }
-            } catch (e: Exception) {
-                Log.e("ERROR", "Error getting comment", e)
             }
-        }
-
-        return comments.toList()
+        }.awaitAll().filterNotNull()
     }
 
     fun deleteCommentTransaction(transaction: Transaction, id: String) {

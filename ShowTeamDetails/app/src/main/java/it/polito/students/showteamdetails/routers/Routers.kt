@@ -43,6 +43,7 @@ import it.polito.students.showteamdetails.GoogleAuthUiClient
 import it.polito.students.showteamdetails.MainActivity
 import it.polito.students.showteamdetails.R
 import it.polito.students.showteamdetails.RegisterPage
+import it.polito.students.showteamdetails.ShowToast
 import it.polito.students.showteamdetails.SignInScreen
 import it.polito.students.showteamdetails.SignInViewModel
 import it.polito.students.showteamdetails.Utils
@@ -447,16 +448,21 @@ fun HomeRouter(
 
 
         composable("{teamId}/${Utils.RoutesEnum.ROLE_ASSIGNATION_REQUEST_TEAM}/{memberId}") { backStackEntry ->
-            Log.d(
-                "HomeRouter",
-                "{teamId}/${Utils.RoutesEnum.ROLE_ASSIGNATION_REQUEST_TEAM}/{memberId}"
-            )
+            Log.d("HomeRouter","{teamId}/${Utils.RoutesEnum.ROLE_ASSIGNATION_REQUEST_TEAM}/{memberId}")
 
             val teamId = backStackEntry.arguments?.getString("teamId")
             val memberId = backStackEntry.arguments?.getString("memberId")
 
             if (teamId != null && memberId != null) {
-                teamListVm.joinTeamNewMember(teamId, memberId)
+                var message = R.string.team_request_sent
+                val request = teamListVm.joinTeamNewMember(teamId, memberId)
+                if(request == 0) {
+                    message = R.string.team_request_failed
+                } else if(request == -1) {
+                    message = R.string.team_request_already_sent
+                }
+
+                ShowToast(message = stringResource(message))
                 routerActions.navigateToHomeTeam()
             } else {
                 // Show an error message or handle the null case

@@ -424,4 +424,8 @@
     <string name="nickname_blank" translatable="true">Spitzname darf nicht leer sein!</string>
     <string name="nickname_too_short" translatable="true">Spitzname sollte mindestens 2 Zeichen lang sein!</string>
     <string name="nickname_invalid" translatable="true">Spitzname darf keine Leerzeichen enthalten!</string>
+
+    <string name="team_request_sent">Die Anfrage wurde erfolgreich gesendet!</string>
+    <string name="team_request_failed">Die Anfrage ist fehlgeschlagen!</string>
+    <string name="team_request_already_sent">Die Anfrage wurde bereits gesendet!</string>
 </resources>

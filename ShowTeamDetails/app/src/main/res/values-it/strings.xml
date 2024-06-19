@@ -422,4 +422,8 @@
     <string name="nickname_blank" translatable="true">Il nickname non può essere vuoto!</string>
     <string name="nickname_too_short" translatable="true">Il nickname deve contenere almeno 2 caratteri!</string>
     <string name="nickname_invalid" translatable="true">Il nickname non può contenere spazi!</string>
+
+    <string name="team_request_sent">La richiesta è stata inviata correttamente!</string>
+    <string name="team_request_failed">La richiesta non è riuscita!</string>
+    <string name="team_request_already_sent">La richiesta è già stata inviata!</string>
 </resources>
