@@ -184,6 +184,9 @@ class TeamViewModel(
             teamModel.taskModel.deleteTask(task.getTask())
             _tasksList.value.removeIf { it.id == task.id }
             taskCache?.removeIf { it.id == task.id }
+            val newList = currentPageTasks?.toMutableList()
+            newList?.removeIf { it.id == task.id }
+            currentPageTasks = newList
         }
     }
 
