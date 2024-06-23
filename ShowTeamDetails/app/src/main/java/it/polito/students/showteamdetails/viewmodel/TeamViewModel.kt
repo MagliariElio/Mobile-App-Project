@@ -137,9 +137,9 @@ class TeamViewModel(
                     taskInsertedVm.creationField.dateCreation,
                     R.string.created_task
                 )
-                taskInsertedVm.historyListField.addHistory(history)
+                taskInsertedVm.historyListField.setVal(listOf(history))
                 _tasksList.value.add(taskInsertedVm)
-                taskCache?.add(taskInsertedVm)
+                //taskCache?.add(taskInsertedVm)
             }
 
         }
