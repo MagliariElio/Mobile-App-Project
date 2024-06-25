@@ -680,7 +680,7 @@ object Utils {
             Locale.ITALIAN -> R.drawable.ic_italy_flag
             Locale.FRENCH -> R.drawable.ic_french_flag
             Locale.GERMAN -> R.drawable.ic_german_flag
-            else -> R.drawable.on_hold
+            else -> R.drawable.ic_great_britain_flag
         }
     }
 

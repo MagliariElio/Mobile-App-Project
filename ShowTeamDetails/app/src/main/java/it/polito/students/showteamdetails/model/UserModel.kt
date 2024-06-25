@@ -633,7 +633,7 @@ class UserModel {
                 reviews = updatedUser.reviews.map {
                     FirebaseReview().apply {
                         message = it.message
-                        createdBy = db.collection("users").document("users/${it.createdBy.id}")
+                        createdBy = db.collection("users").document(it.createdBy.id)
                         dateCreation = Timestamp(
                             it.dateCreation.atZone(ZoneId.systemDefault()).toInstant()
                                 .toEpochMilli() / 1000, 0

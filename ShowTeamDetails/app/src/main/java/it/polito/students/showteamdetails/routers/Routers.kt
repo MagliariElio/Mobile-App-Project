@@ -462,7 +462,7 @@ fun HomeRouter(
                     message = R.string.team_request_already_sent
                 }
 
-                ShowToast(message = stringResource(message))
+                //ShowToast(message = stringResource(message))
                 routerActions.navigateToHomeTeam()
             } else {
                 // Show an error message or handle the null case

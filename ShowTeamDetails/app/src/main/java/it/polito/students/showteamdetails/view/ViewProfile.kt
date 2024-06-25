@@ -552,9 +552,9 @@ fun TeamView(teamListVm: TeamListViewModel, user: Member, routerActions: RouterA
     val grayBackground = colorResource(R.color.gray)
 
     val currentTeams by teamListVm.teamList.collectAsState()
-    val memberTeams = currentTeams.filter { teamField ->
+    val memberTeams = teamListVm.teamList.collectAsState().value.filter { teamField ->
         teamField.teamField.membersField.members.any { memberInfo ->
-            memberInfo.profile == user
+            memberInfo.profile.id == user.id
         }
     }
 
@@ -588,6 +588,7 @@ fun TeamView(teamListVm: TeamListViewModel, user: Member, routerActions: RouterA
                 teamField.teamField.picture.let {
                     val numberCompletedTaskValue = teamField.numberCompletedTask.collectAsState().value
                     val numberAssignedTaskValue = teamField.numberAssignedTask.collectAsState().value
+                    teamField.loadTaskCounts()
                     TeamRow(
                         teamField.teamField.id,
                         teamField.teamField.nameField.value,

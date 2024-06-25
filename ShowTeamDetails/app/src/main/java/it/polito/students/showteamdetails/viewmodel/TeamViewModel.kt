@@ -45,6 +45,7 @@ class TeamViewModel(
 
     fun loadTasks() {
         viewModelScope.launch {
+            loadTaskCounts()
             _isTasksListLoading.value = true
             if (taskCache != null) {
                 _tasksList.value = taskCache!!

@@ -247,29 +247,33 @@ fun HomePage(
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            ModalDrawerSheet {
-                LazyColumn {
-                    item {
-                        val navBackStackEntry = navController.currentBackStackEntry
-                        val teamId =
-                            navBackStackEntry?.arguments?.getString("teamId")
-                        val currentTeams by teamListVm.teamList.collectAsState()
-                        val teamVm = currentTeams.find { it.teamField.id == teamId }
-                        if (teamVm != null) {
-                            ModelDrawerContentTeam(teamVm, routerActions, drawerState)
-                            HorizontalLine()
-                        }
+            if (googleAuthUiClient.getSignedInUser() != null &&
+                googleAuthUiClient.getSignedInUser()?.email == Utils.getmemberAccessed().value.email
+            ) {
+                ModalDrawerSheet {
+                    LazyColumn {
+                        item {
+                            val navBackStackEntry = navController.currentBackStackEntry
+                            val teamId =
+                                navBackStackEntry?.arguments?.getString("teamId")
+                            val currentTeams by teamListVm.teamList.collectAsState()
+                            val teamVm = currentTeams.find { it.teamField.id == teamId }
+                            if (teamVm != null) {
+                                ModelDrawerContentTeam(teamVm, routerActions, drawerState)
+                                HorizontalLine()
+                            }
 
-                        ModelDrawerContentUser(routerActions, drawerState, teamListVm)
-                        Row(
-                            modifier = Modifier
-                                .padding(horizontal = 15.dp, vertical = 26.dp)
-                        ) {
-                            Text(
-                                text = stringResource(id = R.string.version) + ": ${Fixture.NUMBER_VERSION}",
-                                fontWeight = FontWeight.Normal,
-                                fontSize = 15.sp
-                            )
+                            ModelDrawerContentUser(routerActions, drawerState, teamListVm)
+                            Row(
+                                modifier = Modifier
+                                    .padding(horizontal = 15.dp, vertical = 26.dp)
+                            ) {
+                                Text(
+                                    text = stringResource(id = R.string.version) + ": ${Fixture.NUMBER_VERSION}",
+                                    fontWeight = FontWeight.Normal,
+                                    fontSize = 15.sp
+                                )
+                            }
                         }
                     }
                 }
