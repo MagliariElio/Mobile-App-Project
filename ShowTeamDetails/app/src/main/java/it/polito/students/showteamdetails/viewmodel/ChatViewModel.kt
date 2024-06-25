@@ -41,7 +41,12 @@ class ChatViewModel(
         }
     }
 
-    fun readMessages(messages: List<Message>) = chatModel.readMessages(messages)
+    fun readMessages(messages: List<Message>) {
+        messages.forEach { mes ->
+            mes.read = true
+        }
+        chatModel.readMessages(messages)
+    }
 
     fun editMessage(newMessage: Message, newText: String) =
         chatModel.editMessage(newMessage, newText)
