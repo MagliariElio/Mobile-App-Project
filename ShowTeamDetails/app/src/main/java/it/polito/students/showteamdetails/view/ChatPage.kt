@@ -156,18 +156,18 @@ fun ChatPage(
                                         .padding(
                                             start = 10.dp,
                                             end = 10.dp,
-                                            bottom = if (index != openChat.messages.size - 1 && openChat.messages[index + 1].sender == message.sender) 6.dp else 15.dp
+                                            bottom = if (index != openChat.messages.size - 1 && openChat.messages[index + 1].sender.id == message.sender.id) 6.dp else 15.dp
                                         )
                                         .requiredSizeIn(minHeight = 30.dp)
                                         .pointerInput(Unit) {
                                             detectTapGestures(
                                                 onLongPress = {
-                                                    if (message.sender == Utils.memberAccessed.value)
+                                                    if (message.sender.id == Utils.memberAccessed.value.id)
                                                         teamListVm.messageMenuOpen = message
                                                 }
                                             )
                                         },
-                                    horizontalArrangement = if (message.sender == Utils.memberAccessed.value) Arrangement.End else Arrangement.Start
+                                    horizontalArrangement = if (message.sender.id == Utils.memberAccessed.value.id) Arrangement.End else Arrangement.Start
                                 ) {
 
                                     MessageBox(
@@ -177,7 +177,7 @@ fun ChatPage(
                                         openChat = openChat
                                     )
 
-                                    if (teamListVm.messageMenuOpen == message) {
+                                    if ((teamListVm.messageMenuOpen?.id ?: "") == message.id) {
                                         DropdownMenu(
                                             modifier = Modifier
                                                 .background(Color.White)
@@ -186,7 +186,7 @@ fun ChatPage(
                                                     colorResource(id = R.color.primary_color),
                                                     RoundedCornerShape(4.dp)
                                                 ),
-                                            expanded = teamListVm.messageMenuOpen == message,
+                                            expanded = (teamListVm.messageMenuOpen?.id ?: "") == message.id,
                                             onDismissRequest = {
                                                 teamListVm.messageMenuOpen = null
                                             }) {
@@ -377,6 +377,7 @@ fun getSenderColor(sender: Member): Color {
 }
 
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun MessageBox(
     pageWidth: Float,
@@ -384,8 +385,8 @@ fun MessageBox(
     teamListVm: TeamListViewModel,
     openChat: Chat
 ) {
-    val senderColor = if (message.sender == Utils.memberAccessed.value) {
-        if (teamListVm.messageMenuOpen == message || teamListVm.editingMessage == message) {
+    val senderColor = if (message.sender.id == Utils.memberAccessed.value.id) {
+        if (teamListVm.messageMenuOpen?.id == message.id || teamListVm.editingMessage?.id == message.id) {
             colorResource(id = R.color.attention_color)
         } else {
             colorResource(id = R.color.green).copy(alpha = .3f)
@@ -394,7 +395,7 @@ fun MessageBox(
         getSenderColor(message.sender).copy(alpha = .3f)
     }
 
-    val borderColor = if (message.sender == Utils.memberAccessed.value) {
+    val borderColor = if (message.sender.id == Utils.memberAccessed.value.id) {
         colorResource(id = R.color.primary_color)
     } else {
         getSenderColor(message.sender)
