@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -343,50 +344,67 @@ class ChatModel {
         }
     }
 
-    fun readMessages(messages: List<Message>) = runBlocking {
-        val messagesCollectionRef = db.collection("messages")
+    fun readMessages(messages: List<Message>) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val messagesCollectionRef = db.collection("messages")
 
-        messages.forEach { message ->
-            val chatDocumentRef = messagesCollectionRef.document(message.id)
-            val documentSnap = chatDocumentRef.get().await()
+            messages.forEach { message ->
+                val chatDocumentRef = messagesCollectionRef.document(message.id)
+                val documentSnap = chatDocumentRef.get().await()
 
-            val readMap = documentSnap.get("read") as MutableMap<String, Boolean>? ?: mutableMapOf()
-            readMap[Utils.memberAccessed.value.id] = true
+                val readMap = documentSnap.get("read") as MutableMap<String, Boolean>? ?: mutableMapOf()
+                readMap[Utils.memberAccessed.value.id] = true
 
-            chatDocumentRef.update("read", readMap).await()
+
+                chatDocumentRef.update("read", readMap).await()
+            }
         }
     }
 
-    fun editMessage(newMessage: Message, newText: String) = runBlocking {
-        val messagesCollectionRef = db.collection("messages")
-        val messageDocumentRef = messagesCollectionRef.document(newMessage.id)
 
-        val updates = mapOf(
-            "text" to newText,
-            "edited" to true
-        )
+    fun editMessage(newMessage: Message, newText: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val messagesCollectionRef = db.collection("messages")
+            val messageDocumentRef = messagesCollectionRef.document(newMessage.id)
 
-        messageDocumentRef.update(updates).await()
+            val updates = mapOf(
+                "text" to newText,
+                "edited" to true
+            )
+
+            try {
+                messageDocumentRef.update(updates).await()
+            } catch (e: Exception) {
+                println("Error updating message: ${e.message}")
+            }
+        }
     }
 
-    fun deleteMessage(chat: Chat, messageId: String) = runBlocking {
-        val messagesCollectionRef = db.collection("messages")
-        val chatsCollectionRef =
-            if (chat.teamId != null) db.collection("groupChats") else db.collection("individualChats")
 
-        val messageDocumentRef = messagesCollectionRef.document(messageId)
-        val chatDocumentRef = chatsCollectionRef.document(chat.id)
+    fun deleteMessage(chat: Chat, messageId: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val messagesCollectionRef = db.collection("messages")
+            val chatsCollectionRef = if (chat.teamId != null) db.collection("groupChats") else db.collection("individualChats")
 
-        db.runTransaction { transaction ->
-            val chatDocument = transaction.get(chatDocumentRef)
+            val messageDocumentRef = messagesCollectionRef.document(messageId)
+            val chatDocumentRef = chatsCollectionRef.document(chat.id)
 
-            val messages = chatDocument.get("messages") as MutableList<DocumentReference>
-            messages.remove(messageDocumentRef)
+            try {
+                db.runTransaction { transaction ->
+                    val chatDocument = transaction.get(chatDocumentRef)
 
-            transaction.update(chatDocumentRef, "messages", messages)
-            transaction.delete(messageDocumentRef)
-        }.await()
+                    val messages = chatDocument.get("messages") as MutableList<DocumentReference>
+                    messages.remove(messageDocumentRef)
+
+                    transaction.update(chatDocumentRef, "messages", messages)
+                    transaction.delete(messageDocumentRef)
+                }.await()
+            } catch (e: Exception) {
+                println("Error deleting message: ${e.message}")
+            }
+        }
     }
+
 
 
     suspend fun addNewIndividualChat(individualChat: Chat): String {
