@@ -1,3 +1,7 @@
+### Teacher: Malnati Giovanni
+### Grade: 30 cum laude
+### Politecnico di Torino
+
 # Google Account Credentials
 - Username: `synchrotask@gmail.com`
 - Password: `WE^PbVa2bG`
